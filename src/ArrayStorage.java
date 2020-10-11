@@ -2,41 +2,45 @@
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int STORAGE_LOW = 0;
-    private static final int STORAGE_HI = 10000;
+    private static final int CAPACITY = 10000;
 
-    Resume[] storage = new Resume[STORAGE_HI];
+    Resume[] storage = new Resume[CAPACITY];
 
-    private int count = STORAGE_LOW;
+    private int count = 0;
 
     void clear() {
-        for (int i = STORAGE_LOW; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             storage[i] = null;
         }
-        count = STORAGE_LOW;
+        count = 0;
     }
 
     void save(Resume r) {
-        if (count == STORAGE_HI) return;
+        if (count == CAPACITY) return;
 
         int index = getIndex(r.toString());
-        if (index >= STORAGE_LOW && index <= STORAGE_HI) return;
+        if (index >= 0) {
+            return;
+        }
 
         storage[count] = r;
         count++;
     }
 
     Resume get(String uuid) {
-        int index = this.getIndex(uuid);
-        if (index >= STORAGE_LOW && index <= STORAGE_HI)
-            return storage[index];
-        else
+        int index = getIndex(uuid);
+        if (index < 0) {
             return null;
+        }
+
+        return storage[index];
     }
 
     void delete(String uuid) {
-        int index = this.getIndex(uuid);
-        if (!(index >= STORAGE_LOW && index <= STORAGE_HI)) return;
+        int index = getIndex(uuid);
+        if (index < 0) {
+            return;
+        }
 
         for (int i = index; i < count - 1; i++) {
             storage[i] = storage[i + 1];
@@ -49,21 +53,19 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] retval = new Resume[count];
-        for (int i = STORAGE_LOW; i < count; i++) {
-            retval[i] = storage[i];
-        }
-        return retval;
+        Resume[] resumes = new Resume[count];
+        if (count >= 0) System.arraycopy(storage, 0, resumes, 0, count);
+        return resumes;
     }
 
     int size() {
-        return count - STORAGE_LOW;
+        return count;
     }
 
     int getIndex(String uuid) {
-        for (int i = STORAGE_LOW; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             if (storage[i].toString().equals(uuid)) return i;
         }
-        return STORAGE_LOW - 1;
+        return -1;
     }
 }
