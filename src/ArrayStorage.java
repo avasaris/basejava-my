@@ -3,9 +3,7 @@
  */
 public class ArrayStorage {
     private static final int CAPACITY = 10000;
-
     Resume[] storage = new Resume[CAPACITY];
-
     private int count = 0;
 
     void clear() {
@@ -32,7 +30,6 @@ public class ArrayStorage {
         if (index < 0) {
             return null;
         }
-
         return storage[index];
     }
 
@@ -62,7 +59,7 @@ public class ArrayStorage {
         return count;
     }
 
-    int getIndex(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < count; i++) {
             if (storage[i].toString().equals(uuid)) return i;
         }
