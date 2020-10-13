@@ -1,18 +1,19 @@
 package ru.basejava.resume.storage;
 
 import ru.basejava.resume.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int CAPACITY = 10000;
+    private static final int CAPACITY = 10_000;
     Resume[] storage = new Resume[CAPACITY];
     private int size = 0;
 
     public void clear() {
-        Arrays.fill(storage,0,size-1,null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
@@ -35,11 +36,11 @@ public class ArrayStorage {
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("ERROR: Didn't found the resume for update.");
+            System.out.println("ERROR: Didn't found the resume '" + resume.getUuid() + "' for update.");
             return;
         }
 
-        storage[index].setUuid(resume.getUuid());
+        //storage[index].setUuid(resume.getUuid());
     }
 
     public Resume get(String uuid) {
@@ -66,7 +67,7 @@ public class ArrayStorage {
 
     public Resume[] getAll() {
         Resume[] resumes = new Resume[size];
-        if (size >= 0) System.arraycopy(storage, 0, resumes, 0, size);
+        System.arraycopy(storage, 0, resumes, 0, size);
         return resumes;
     }
 
