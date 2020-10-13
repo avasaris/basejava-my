@@ -1,3 +1,7 @@
+package ru.basejava.resume.storage;
+
+import ru.basejava.resume.model.Resume;
+
 /**
  * Array based storage for Resumes
  */
@@ -6,14 +10,14 @@ public class ArrayStorage {
     Resume[] storage = new Resume[CAPACITY];
     private int count = 0;
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < count; i++) {
             storage[i] = null;
         }
         count = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         if (count == CAPACITY) return;
 
         int index = getIndex(r.toString());
@@ -25,7 +29,7 @@ public class ArrayStorage {
         count++;
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             return null;
@@ -33,7 +37,7 @@ public class ArrayStorage {
         return storage[index];
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             return;
@@ -49,13 +53,13 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         Resume[] resumes = new Resume[count];
         if (count >= 0) System.arraycopy(storage, 0, resumes, 0, count);
         return resumes;
     }
 
-    int size() {
+    public int size() {
         return count;
     }
 
