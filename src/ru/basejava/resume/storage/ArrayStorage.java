@@ -36,11 +36,10 @@ public class ArrayStorage {
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("ERROR: Didn't found the resume '" + resume.getUuid() + "' for update.");
+            System.out.println("ERROR: Didn't found the resume '" + resume + "' for update.");
             return;
         }
-
-        //storage[index].setUuid(resume.getUuid());
+        storage[index] = resume;
     }
 
     public Resume get(String uuid) {
@@ -49,7 +48,6 @@ public class ArrayStorage {
             System.out.println("ERROR: Didn't found the resume '" + uuid + "'.");
             return null;
         }
-
         return storage[index];
     }
 
