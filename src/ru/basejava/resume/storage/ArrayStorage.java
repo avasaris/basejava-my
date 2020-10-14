@@ -39,8 +39,7 @@ public class ArrayStorage {
             System.out.println("ERROR: Didn't found the resume '" + resume.getUuid() + "' for update.");
             return;
         }
-
-        //storage[index].setUuid(resume.getUuid());
+        storage[index] = resume;
     }
 
     public Resume get(String uuid) {
@@ -49,7 +48,6 @@ public class ArrayStorage {
             System.out.println("ERROR: Didn't found the resume '" + uuid + "'.");
             return null;
         }
-
         return storage[index];
     }
 
