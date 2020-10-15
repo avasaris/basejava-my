@@ -5,7 +5,7 @@ import ru.basejava.resume.model.Resume;
 public abstract class AbstractArrayStorage implements Storage {
     protected static final int CAPACITY = 10_000;
     protected int size = 0;
-    Resume[] storage = new Resume[CAPACITY];
+    final Resume[] storage = new Resume[CAPACITY];
 
     @Override
     public Resume get(String uuid) {
