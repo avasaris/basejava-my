@@ -43,16 +43,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            System.out.println("ERROR: Didn't found the resume '" + uuid + "'.");
-            return null;
-        }
-        return storage[index];
-    }
-
-    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -73,6 +63,16 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    protected int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }
