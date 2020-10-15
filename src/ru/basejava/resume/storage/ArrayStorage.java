@@ -7,16 +7,15 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private static final int CAPACITY = 10_000;
-    Resume[] storage = new Resume[CAPACITY];
-    private int size = 0;
+public class ArrayStorage extends AbstractArrayStorage {
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
+    @Override
     public void save(Resume resume) {
         if (size == CAPACITY) {
             System.out.println("ERROR: You reach the storage capacity.");
@@ -33,6 +32,7 @@ public class ArrayStorage {
         size++;
     }
 
+    @Override
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
@@ -42,6 +42,7 @@ public class ArrayStorage {
         storage[index] = resume;
     }
 
+    @Override
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -51,6 +52,7 @@ public class ArrayStorage {
         return storage[index];
     }
 
+    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -63,20 +65,14 @@ public class ArrayStorage {
         size--;
     }
 
+    @Override
     public Resume[] getAll() {
-        Resume[] resumes = new Resume[size];
-        System.arraycopy(storage, 0, resumes, 0, size);
-        return resumes;
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
+    @Override
     public int size() {
         return size;
     }
 
-    private int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].toString().equals(uuid)) return i;
-        }
-        return -1;
-    }
 }
