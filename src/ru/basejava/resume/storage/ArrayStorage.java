@@ -7,7 +7,6 @@ import ru.basejava.resume.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    // Implement step from Template Method 1 from AbstractArrayStorage
     @Override
     protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
@@ -18,16 +17,13 @@ public class ArrayStorage extends AbstractArrayStorage {
         return -1;
     }
 
-    // Implement step from Template Method 2 from AbstractArrayStorage
     @Override
-    protected void saveAt(Resume resume, int index) {
+    protected void insertAt(Resume resume, int index) {
         storage[size] = resume;
     }
 
-    // Implement step from Template Method 3 from AbstractArrayStorage
     @Override
-    protected void deleteAt(int index) {
+    protected void shiftAt(int index) {
         storage[index] = storage[size - 1];
-        storage[size - 1] = null;
     }
 }
