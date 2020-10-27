@@ -1,34 +1,64 @@
 package ru.basejava.resume.storage;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import ru.basejava.resume.exception.NotExistStorageException;
+import ru.basejava.resume.model.Resume;
 
-public class AbstractArrayStorageTest {
+public abstract class AbstractArrayStorageTest {
+    Storage storage;
 
-    @org.junit.Test
-    public void get() {
+    private final String UUID1 = "uuid1";
+    private final String UUID2 = "uuid2";
+    private final String UUID3 = "uuid3";
+
+    @Before
+    public void setStorage() {
+        storage.clear();
+        storage.save(new Resume(UUID1));
+        storage.save(new Resume(UUID2));
+        storage.save(new Resume(UUID3));
     }
 
-    @org.junit.Test
+    @Test
+    public void get() {
+        Assert.assertEquals(new Resume("uuid1"), storage.get("uuid1"));
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void getNotExist() {
+        storage.get("dummy");
+    }
+
+    @Test
     public void update() {
     }
 
-    @org.junit.Test
+    @Test
     public void save() {
     }
 
-    @org.junit.Test
+    @Test
     public void delete() {
     }
 
-    @org.junit.Test
+    @Test
     public void clear() {
     }
 
-    @org.junit.Test
+    @Test
     public void getAll() {
     }
 
-    @org.junit.Test
+    @Test
     public void size() {
+        Assert.assertEquals(3, storage.size());
     }
+
+    @Test
+    public void overflow() {
+
+    }
+
 }
