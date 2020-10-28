@@ -8,6 +8,7 @@ import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public abstract class AbstractArrayStorageTest {
@@ -75,7 +76,18 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void delete() {
+        storage.delete(UUID1);
+        Assert.assertArrayEquals(Arrays.stream(storage.getAll()).sorted().toArray(), Arrays.stream(new Resume[]{resume2, resume3}).sorted().toArray());
+        storage.delete(UUID3);
+        Assert.assertArrayEquals(storage.getAll(), new Resume[]{resume2});
+        storage.delete(UUID2);
+        Assert.assertArrayEquals(storage.getAll(), new Resume[]{});
+    }
 
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExist() {
+        String newUuid = UUID.randomUUID().toString();
+        storage.delete(newUuid);
     }
 
     @Test
