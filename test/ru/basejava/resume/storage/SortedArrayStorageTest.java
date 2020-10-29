@@ -13,8 +13,8 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
 
     @Test
     public void getAllSorted() {
-        Object[] expected = Arrays.stream(new Resume[]{resume1, resume2, resume3}).sorted().toArray();
-        Object[] actual = Arrays.stream(storage.getAll()).toArray();
+        Resume[] expected = Arrays.stream(new Resume[]{resume1, resume2, resume3}).sorted().toArray(Resume[]::new);
+        Resume[] actual = Arrays.stream(storage.getAll()).toArray(Resume[]::new);
         Assert.assertArrayEquals(expected, actual);
     }
 }
