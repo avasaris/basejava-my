@@ -3,8 +3,6 @@ package ru.basejava.resume.storage;
 import ru.basejava.resume.model.Resume;
 
 public interface Storage {
-    void clear();
-
     void save(Resume resume);
 
     void update(Resume resume);
@@ -12,6 +10,8 @@ public interface Storage {
     Resume get(String uuid);
 
     void delete(String uuid);
+
+    void clear();
 
     Resume[] getAll();
 

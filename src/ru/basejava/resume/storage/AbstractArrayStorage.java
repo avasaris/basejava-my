@@ -8,28 +8,8 @@ import ru.basejava.resume.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    static final int CAPACITY = 10_000;
-
     final Resume[] storage = new Resume[CAPACITY];
     int size = 0;
-
-    @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
-    }
-
-    @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        storage[index] = resume;
-    }
 
     @Override
     public void save(Resume resume) {
@@ -42,6 +22,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         }
         insertAt(resume, index);
         size++;
+    }
+
+    @Override
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
+        }
+        storage[index] = resume;
+    }
+
+    @Override
+    public Resume get(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        }
+        return storage[index];
     }
 
     @Override
