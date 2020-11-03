@@ -53,11 +53,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    protected abstract int getIndex(String uuid);
+    abstract int getIndex(String uuid);
 
-    protected abstract void insertAt(Resume resume, int index);
+    abstract void insertAt(Resume resume, int index);
 
-    protected abstract void shiftAt(int index);
+    abstract void shiftAt(int index);
 
 
     // Common methods

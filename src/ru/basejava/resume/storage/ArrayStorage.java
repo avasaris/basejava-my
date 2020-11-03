@@ -8,7 +8,7 @@ import ru.basejava.resume.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected int getIndex(String uuid) {
+    int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
@@ -18,12 +18,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertAt(Resume resume, int index) {
+    void insertAt(Resume resume, int index) {
         storage[size] = resume;
     }
 
     @Override
-    protected void shiftAt(int index) {
+    void shiftAt(int index) {
         storage[index] = storage[size - 1];
     }
 }
