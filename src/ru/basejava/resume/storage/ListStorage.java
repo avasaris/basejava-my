@@ -9,14 +9,14 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
 
-    List<Resume> storage = new LinkedList<>();
+    final List<Resume> listStorage = new LinkedList<>();
 
     @Override
     public void save(Resume resume) {
-        if (storage.contains(resume)) {
+        if (listStorage.contains(resume)) {
             throw new ExistStorageException(resume.getUuid());
         }
-        storage.add(resume);
+        listStorage.add(resume);
     }
 
     @Override
@@ -28,29 +28,29 @@ public class ListStorage extends AbstractStorage {
     @Override
     public Resume get(String uuid) {
         Resume searchResume = new Resume(uuid);
-        if (!storage.contains(searchResume)) {
+        if (!listStorage.contains(searchResume)) {
             throw new NotExistStorageException(uuid);
         }
-        return storage.get(storage.indexOf(searchResume));
+        return listStorage.get(listStorage.indexOf(searchResume));
     }
 
     @Override
     public void delete(String uuid) {
-        storage.remove(get(uuid));
+        listStorage.remove(get(uuid));
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        listStorage.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(Resume[]::new);
+        return listStorage.toArray(Resume[]::new);
     }
 
     @Override
     public int size() {
-        return storage.size();
+        return listStorage.size();
     }
 }
