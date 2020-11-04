@@ -8,6 +8,7 @@ import ru.basejava.resume.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
+    static final int CAPACITY = 10_000;
     final Resume[] storage = new Resume[CAPACITY];
     int size = 0;
 

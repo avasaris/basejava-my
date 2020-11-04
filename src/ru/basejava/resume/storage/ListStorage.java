@@ -2,7 +2,6 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
-import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.LinkedList;
@@ -16,9 +15,6 @@ public class ListStorage extends AbstractStorage {
     public void save(Resume resume) {
         if (storage.contains(resume)) {
             throw new ExistStorageException(resume.getUuid());
-        }
-        if (storage.size() == CAPACITY) {
-            throw new StorageException("Storage overflow", resume.getUuid());
         }
         storage.add(resume);
     }

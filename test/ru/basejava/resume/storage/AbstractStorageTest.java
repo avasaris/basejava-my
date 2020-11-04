@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
-import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.UUID;
@@ -68,18 +67,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
         storage.save(resume1);
-    }
-
-    @Test(expected = StorageException.class)
-    public void saveOverflow() {
-        try {
-            while (storage.size() < AbstractStorage.CAPACITY) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail("Unexpected storage overflow");
-        }
-        storage.save(new Resume());
     }
 
     @Test(expected = NotExistStorageException.class)
