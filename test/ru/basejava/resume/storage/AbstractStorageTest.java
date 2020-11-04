@@ -13,9 +13,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID1 = UUID.randomUUID().toString();
     private static final String UUID2 = UUID.randomUUID().toString();
     private static final String UUID3 = UUID.randomUUID().toString();
-    final Resume resume1 = new Resume(UUID1);
-    final Resume resume2 = new Resume(UUID2);
-    final Resume resume3 = new Resume(UUID3);
+    final Resume resume1 = new Resume(UUID1, "");
+    final Resume resume2 = new Resume(UUID2, "");
+    final Resume resume3 = new Resume(UUID3, "");
 
     final Storage storage;
 
@@ -45,20 +45,20 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resumeForUpdate = new Resume(UUID1);
+        Resume resumeForUpdate = new Resume(UUID1, "");
         storage.update(resumeForUpdate);
         Assert.assertEquals(resumeForUpdate, storage.get(UUID1));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume());
+        storage.update(new Resume("Test Test"));
     }
 
     @Test
     public void save() {
         String uuidForSave = UUID.randomUUID().toString();
-        Resume resumeForSave = new Resume(uuidForSave);
+        Resume resumeForSave = new Resume(uuidForSave, "");
         storage.save(resumeForSave);
         Assert.assertEquals(4, storage.size());
         Assert.assertEquals(resumeForSave, storage.get(uuidForSave));

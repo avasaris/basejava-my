@@ -27,7 +27,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume get(String uuid) {
-        Resume searchResume = new Resume(uuid);
+        Resume searchResume = new Resume(uuid, "");
         if (!listStorage.contains(searchResume)) {
             throw new NotExistStorageException(uuid);
         }

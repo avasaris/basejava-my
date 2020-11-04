@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class MainReflection {
     public static void main(String[] args) {
-        Resume resume = new Resume("my-very-uniq-uuid");
+        Resume resume = new Resume("my-very-uniq-uuid", "");
 
         System.out.println("------ getDeclaredFields ---------------------");
 
