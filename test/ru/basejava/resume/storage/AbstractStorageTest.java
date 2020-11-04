@@ -7,15 +7,16 @@ import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public abstract class AbstractStorageTest {
     private static final String UUID1 = UUID.randomUUID().toString();
     private static final String UUID2 = UUID.randomUUID().toString();
     private static final String UUID3 = UUID.randomUUID().toString();
-    final Resume resume1 = new Resume(UUID1, "");
-    final Resume resume2 = new Resume(UUID2, "");
-    final Resume resume3 = new Resume(UUID3, "");
+    final Resume resume1 = new Resume(UUID1, "Alex");
+    final Resume resume2 = new Resume(UUID2, "Zed");
+    final Resume resume3 = new Resume(UUID3, "Dan");
 
     final Storage storage;
 
@@ -90,5 +91,14 @@ public abstract class AbstractStorageTest {
     @Test
     public void size() {
         Assert.assertEquals(3, storage.size());
+    }
+
+    @Test
+    public void getAll() {
+        Resume[] expected = new Resume[]{resume1, resume2, resume3};
+        Arrays.sort(expected);
+        Resume[] actual = storage.getAll();
+        Arrays.sort(actual);
+        Assert.assertArrayEquals(expected, actual);
     }
 }
