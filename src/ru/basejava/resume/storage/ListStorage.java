@@ -22,7 +22,7 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void update(Resume resume) {
         Resume resumeForUpdate = get(resume.getUuid());
-        resumeForUpdate.updateFrom(resume);
+        resumeForUpdate.setFullName(resume.getFullName());
     }
 
     @Override

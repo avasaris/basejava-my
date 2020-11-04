@@ -49,11 +49,7 @@ public class Resume implements Comparable<Resume> {
     }
 
     @Override
-    public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
-    }
-
-    public void updateFrom(Resume resume) {
-        fullName = resume.fullName;
+    public int compareTo(Resume resume) {
+        return fullName.compareTo(resume.fullName);
     }
 }
