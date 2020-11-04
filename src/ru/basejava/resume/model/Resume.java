@@ -5,7 +5,7 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
 
     private final String uuid;
-    private String name;
+    private String fullName;
 
     public Resume() {
         this(UUID.randomUUID().toString());
@@ -13,15 +13,15 @@ public class Resume implements Comparable<Resume> {
 
     public Resume(String uuid) {
         this.uuid = uuid;
-        this.name = uuid;
+        this.fullName = uuid;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUuid() {
@@ -45,7 +45,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return "UUID = " + uuid + " name = " + name;
+        return "UUID = " + uuid + " name = " + fullName;
     }
 
     @Override
@@ -54,6 +54,6 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void updateFrom(Resume resume) {
-        name = resume.name;
+        fullName = resume.fullName;
     }
 }
