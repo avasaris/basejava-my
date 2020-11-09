@@ -21,8 +21,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size == CAPACITY) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        int position = getPosition(resume.getFullName());
-        insertAt(resume, position);
+        insertAt(resume, index);
         size++;
     }
 
@@ -55,7 +54,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    abstract int getPosition(String fullName);
+    abstract int getIndex(String uuid);
 
     abstract void insertAt(Resume resume, int index);
 
@@ -77,15 +76,5 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     public int size() {
         return size;
-    }
-
-    // Utility methods
-    private int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

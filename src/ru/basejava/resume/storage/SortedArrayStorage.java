@@ -7,8 +7,8 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    int getPosition(String fullName) {
-        return Arrays.binarySearch(storage, 0, size, new Resume(fullName));
+    int getIndex(String uuid) {
+        return Arrays.binarySearch(storage, 0, size, new Resume(uuid, ""));
     }
 
     @Override
