@@ -14,7 +14,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     void insertAt(Resume resume, int index) {
         int insPoint = index;
-        if(index < 0) {
+        if (index < 0) {
             insPoint = -index - 1;
         }
         System.arraycopy(storage, insPoint, storage, insPoint + 1, size - insPoint);

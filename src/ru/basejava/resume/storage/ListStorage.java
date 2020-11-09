@@ -1,7 +1,5 @@
 package ru.basejava.resume.storage;
 
-import ru.basejava.resume.exception.ExistStorageException;
-import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.LinkedList;
@@ -12,31 +10,41 @@ public class ListStorage extends AbstractStorage {
     final List<Resume> listStorage = new LinkedList<>();
 
     @Override
-    public void save(Resume resume) {
-        if (listStorage.contains(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
+    void deleteAt(int index) {
+        listStorage.remove(index);
+    }
+
+    @Override
+    boolean checkCapacity() {
+        return false;
+    }
+
+    @Override
+    int getIndex(String uuid) {
+        return listStorage.indexOf(new Resume(uuid, ""));
+    }
+
+    @Override
+    void insertAt(Resume resume, int index) {
         listStorage.add(resume);
     }
 
     @Override
-    public void update(Resume resume) {
-        Resume resumeForUpdate = get(resume.getUuid());
-        resumeForUpdate.setFullName(resume.getFullName());
+    void increaseSize() {
     }
 
     @Override
-    public Resume get(String uuid) {
-        Resume searchResume = new Resume(uuid, "");
-        if (!listStorage.contains(searchResume)) {
-            throw new NotExistStorageException(uuid);
-        }
-        return listStorage.get(listStorage.indexOf(searchResume));
+    void decreaseSize() {
     }
 
     @Override
-    public void delete(String uuid) {
-        listStorage.remove(get(uuid));
+    void updateAt(Resume resume, int index) {
+        listStorage.set(index, resume);
+    }
+
+    @Override
+    Resume getAt(int index) {
+        return listStorage.get(index);
     }
 
     @Override
