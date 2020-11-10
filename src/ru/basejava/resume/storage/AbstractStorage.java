@@ -20,9 +20,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void delete(String uuid) {
         int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+        checkElementExist(index, uuid);
         deleteAt(index);
     }
 
@@ -31,9 +29,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+        checkElementExist(index, resume.getUuid());
         updateAt(resume, index);
     }
 
@@ -42,9 +38,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+        checkElementExist(index, uuid);
         return getAt(index);
     }
 
@@ -56,4 +50,10 @@ public abstract class AbstractStorage implements Storage {
     }
 
     abstract Resume[] storageCopy();
+
+    private void checkElementExist(int index, String uuid) {
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        }
+    }
 }
