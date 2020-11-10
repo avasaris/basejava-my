@@ -28,19 +28,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    void increaseSize() {
-        size++;
+    void resize(int delta) {
+        size += delta;
     }
 
     @Override
     void deleteAt(int index) {
         shiftAt(index);
         storage[size - 1] = null;
-    }
-
-    @Override
-    void decreaseSize() {
-        size--;
     }
 
     @Override
