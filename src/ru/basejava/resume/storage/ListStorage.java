@@ -35,10 +35,6 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void resize(int delta) {
-    }
-
-    @Override
     void deleteAt(int index) {
         listStorage.remove(index);
     }

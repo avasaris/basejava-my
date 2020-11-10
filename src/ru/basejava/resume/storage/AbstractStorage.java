@@ -16,7 +16,6 @@ public abstract class AbstractStorage implements Storage {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
         insertAt(resume, index);
-        resize(1);
     }
 
     @Override
@@ -26,7 +25,6 @@ public abstract class AbstractStorage implements Storage {
             throw new NotExistStorageException(uuid);
         }
         deleteAt(index);
-        resize(-1);
     }
 
     @Override
@@ -57,8 +55,6 @@ public abstract class AbstractStorage implements Storage {
     abstract boolean checkCapacity();
 
     abstract void insertAt(Resume resume, int index);
-
-    abstract void resize(int delta);
 
     abstract void deleteAt(int index);
 
