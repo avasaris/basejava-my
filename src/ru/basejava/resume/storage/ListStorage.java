@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
 
-    final List<Resume> listStorage = new LinkedList<>();
+    private final List<Resume> listStorage = new LinkedList<>();
 
     @Override
     void deleteAt(int index) {
