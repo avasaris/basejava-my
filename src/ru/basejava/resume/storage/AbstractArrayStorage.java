@@ -1,5 +1,7 @@
 package ru.basejava.resume.storage;
 
+import ru.basejava.resume.exception.ExistStorageException;
+import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.Arrays;
@@ -20,11 +22,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    abstract void shiftAt(int index);
-
     @Override
-    boolean checkCapacity() {
-        return size == CAPACITY;
+    void checkForSaveExceptions(int index, String uuid) {
+        if (index >= 0) {
+            throw new ExistStorageException(uuid);
+        }
+        if (size == CAPACITY) {
+            throw new StorageException("Storage overflow", uuid);
+        }
     }
 
     @Override
@@ -33,6 +38,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         storage[size - 1] = null;
         resize(-1);
     }
+
+    abstract void shiftAt(int index);
 
     @Override
     void updateAt(Resume resume, int index) {

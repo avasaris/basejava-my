@@ -1,5 +1,7 @@
 package ru.basejava.resume.storage;
 
+import ru.basejava.resume.exception.ExistStorageException;
+import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.LinkedList;
@@ -25,8 +27,10 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    boolean checkCapacity() {
-        return false;
+    void checkForSaveExceptions(int index, String uuid) {
+        if (index >= 0) {
+            throw new ExistStorageException(uuid);
+        }
     }
 
     @Override

@@ -9,14 +9,13 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void save(Resume resume) {
         int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        if (checkCapacity()) {
-            throw new StorageException("Storage overflow", resume.getUuid());
-        }
+        checkForSaveExceptions(index, resume.getUuid());
         insertAt(resume, index);
     }
+
+    abstract int getIndex(String uuid);
+    abstract void checkForSaveExceptions(int index, String uuid);
+    abstract void insertAt(Resume resume, int index);
 
     @Override
     public final void delete(String uuid) {
@@ -27,6 +26,8 @@ public abstract class AbstractStorage implements Storage {
         deleteAt(index);
     }
 
+    abstract void deleteAt(int index);
+
     @Override
     public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
@@ -35,6 +36,8 @@ public abstract class AbstractStorage implements Storage {
         }
         updateAt(resume, index);
     }
+
+    abstract void updateAt(Resume resume, int index);
 
     @Override
     public final Resume get(String uuid) {
@@ -45,22 +48,12 @@ public abstract class AbstractStorage implements Storage {
         return getAt(index);
     }
 
+    abstract Resume getAt(int index);
+
     @Override
     public final Resume[] getAll() {
         return storageCopy();
     }
-
-    abstract int getIndex(String uuid);
-
-    abstract boolean checkCapacity();
-
-    abstract void insertAt(Resume resume, int index);
-
-    abstract void deleteAt(int index);
-
-    abstract void updateAt(Resume resume, int index);
-
-    abstract Resume getAt(int index);
 
     abstract Resume[] storageCopy();
 }
