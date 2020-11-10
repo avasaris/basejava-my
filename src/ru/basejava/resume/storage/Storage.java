@@ -7,13 +7,13 @@ public interface Storage {
 
     void update(Resume resume);
 
-    Resume get(String uuid);
-
     void delete(String uuid);
 
-    void clear();
+    Resume get(String uuid);
 
     Resume[] getAll();
+
+    void clear();
 
     int size();
 }

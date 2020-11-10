@@ -9,11 +9,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     final Resume[] storage = new Resume[CAPACITY];
     int size = 0;
 
+    @Override
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
     abstract void shiftAt(int index);
 
     @Override
-    Resume getAt(int index) {
-        return storage[index];
+    boolean checkCapacity() {
+        return size == CAPACITY;
+    }
+
+    @Override
+    void increaseSize() {
+        size++;
     }
 
     @Override
@@ -23,38 +39,22 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    void increaseSize() {
-        size++;
-    }
-
-    @Override
     void decreaseSize() {
         size--;
     }
 
     @Override
-    boolean checkCapacity() {
-        return size == CAPACITY;
+    void updateAt(Resume resume, int index) {
+        storage[index] = resume;
     }
 
     @Override
-    void updateAt(Resume resume, int index) {
-        storage[index] = resume;
+    Resume getAt(int index) {
+        return storage[index];
+    }
+
+    @Override
+    Resume[] storageCopy() {
+        return Arrays.copyOf(storage, size);
     }
 }

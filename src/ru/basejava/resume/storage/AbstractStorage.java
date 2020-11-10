@@ -47,20 +47,26 @@ public abstract class AbstractStorage implements Storage {
         return getAt(index);
     }
 
-    abstract Resume getAt(int index);
-
-    abstract void updateAt(Resume resume, int index);
-
-    abstract void deleteAt(int index);
-
-    abstract boolean checkCapacity();
+    @Override
+    public final Resume[] getAll() {
+        return storageCopy();
+    }
 
     abstract int getIndex(String uuid);
+
+    abstract boolean checkCapacity();
 
     abstract void insertAt(Resume resume, int index);
 
     abstract void increaseSize();
 
+    abstract void deleteAt(int index);
+
     abstract void decreaseSize();
 
+    abstract void updateAt(Resume resume, int index);
+
+    abstract Resume getAt(int index);
+
+    abstract Resume[] storageCopy();
 }

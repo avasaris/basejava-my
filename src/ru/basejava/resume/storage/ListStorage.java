@@ -10,18 +10,23 @@ public class ListStorage extends AbstractStorage {
     private final List<Resume> listStorage = new LinkedList<>();
 
     @Override
-    void deleteAt(int index) {
-        listStorage.remove(index);
+    public void clear() {
+        listStorage.clear();
     }
 
     @Override
-    boolean checkCapacity() {
-        return false;
+    public int size() {
+        return listStorage.size();
     }
 
     @Override
     int getIndex(String uuid) {
         return listStorage.indexOf(new Resume(uuid, ""));
+    }
+
+    @Override
+    boolean checkCapacity() {
+        return false;
     }
 
     @Override
@@ -31,6 +36,11 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     void increaseSize() {
+    }
+
+    @Override
+    void deleteAt(int index) {
+        listStorage.remove(index);
     }
 
     @Override
@@ -48,17 +58,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        listStorage.clear();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return listStorage.toArray(Resume[]::new);
-    }
-
-    @Override
-    public int size() {
-        return listStorage.size();
+    public Resume[] storageCopy() {
+        return listStorage.toArray(new Resume[0]);
     }
 }
