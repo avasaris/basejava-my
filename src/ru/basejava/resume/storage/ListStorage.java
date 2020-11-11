@@ -1,7 +1,6 @@
 package ru.basejava.resume.storage;
 
 import ru.basejava.resume.exception.ExistStorageException;
-import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.LinkedList;
