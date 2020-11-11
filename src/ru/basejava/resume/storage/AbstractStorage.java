@@ -39,13 +39,6 @@ public abstract class AbstractStorage implements Storage {
 
     abstract Resume getAt(int index);
 
-    @Override
-    public final Resume[] getAll() {
-        return storageCopy();
-    }
-
-    abstract Resume[] storageCopy();
-
     private int checkElementExist(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
