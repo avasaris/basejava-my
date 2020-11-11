@@ -30,6 +30,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    final void insertAt(Resume resume, int index) {
+        int insPoint = calculateInsertPosition(index);
+        prepareStorageForInsert(insPoint);
+        storage[insPoint] = resume;
+        size++;
+    }
+
+    abstract int calculateInsertPosition(int index);
+    abstract void prepareStorageForInsert(int insPoint);
+
+    @Override
     void deleteAt(int index) {
         shiftAt(index);
         storage[size - 1] = null;
