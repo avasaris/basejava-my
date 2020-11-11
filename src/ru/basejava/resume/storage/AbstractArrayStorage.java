@@ -33,7 +33,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     void deleteAt(int index) {
         shiftAt(index);
         storage[size - 1] = null;
-        resize(-1);
+        size--;
     }
 
     abstract void shiftAt(int index);
@@ -51,9 +51,5 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     Resume[] storageCopy() {
         return Arrays.copyOf(storage, size);
-    }
-
-    void resize(int delta) {
-        size += delta;
     }
 }
