@@ -1,6 +1,5 @@
 package ru.basejava.resume.storage;
 
-import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.LinkedList;
@@ -26,10 +25,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void checkForSaveExceptions(int index, String uuid) {
-        if (index >= 0) {
-            throw new ExistStorageException(uuid);
-        }
+    void checkAbilityForSave(int index, String uuid) {
+        checkElementNotExist(index, uuid);
     }
 
     @Override
