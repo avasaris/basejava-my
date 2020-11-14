@@ -8,10 +8,10 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void save(Resume resume) {
         int index = checkElementNotExist(resume.getUuid());
-        insertAt(resume, index);
+        insertAt(index, resume);
     }
 
-    abstract void insertAt(Resume resume, int index);
+    abstract void insertAt(int index, Resume resume);
 
     @Override
     public final void delete(String uuid) {
@@ -24,10 +24,10 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public final void update(Resume resume) {
         int index = checkElementExist(resume.getUuid());
-        updateAt(resume, index);
+        updateAt(index, resume);
     }
 
-    abstract void updateAt(Resume resume, int index);
+    abstract void updateAt(int index, Resume resume);
 
     @Override
     public final Resume get(String uuid) {

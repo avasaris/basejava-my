@@ -12,21 +12,15 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    int calculateInsertPosition(int index) {
-        if (index < 0) {
-            index = -index - 1;
-        }
-        return index;
+    void storageInsert(int index, Resume resume) {
+        int position = index < 0 ? -index - 1 : index;
+        System.arraycopy(storage, position, storage, position + 1, size - position);
+        storage[position] = resume;
     }
 
     @Override
-    void prepareStorageForInsert(int insPoint) {
-        System.arraycopy(storage, insPoint, storage, insPoint + 1, size - insPoint);
-    }
-
-    @Override
-    void shiftAt(int index) {
-        int newPoint = index + 1;
-        System.arraycopy(storage, newPoint, storage, index, size - newPoint);
+    void storageDelete(int index) {
+        int position = index + 1;
+        System.arraycopy(storage, position, storage, index, size - position);
     }
 }

@@ -25,7 +25,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void insertAt(Resume resume, int index) {
+    void insertAt(int index, Resume resume) {
         listStorage.add(resume);
     }
 
@@ -35,7 +35,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void updateAt(Resume resume, int index) {
+    void updateAt(int index, Resume resume) {
         listStorage.set(index, resume);
     }
 

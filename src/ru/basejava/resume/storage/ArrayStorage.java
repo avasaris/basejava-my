@@ -1,5 +1,7 @@
 package ru.basejava.resume.storage;
 
+import ru.basejava.resume.model.Resume;
+
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
@@ -13,16 +15,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    int calculateInsertPosition(int index) {
-        return size;
+    void storageInsert(int index, Resume resume) {
+        storage[size] = resume;
     }
 
     @Override
-    void prepareStorageForInsert(int insPoint) {
-    }
-
-    @Override
-    void shiftAt(int index) {
+    void storageDelete(int index) {
         storage[index] = storage[size - 1];
     }
 }
