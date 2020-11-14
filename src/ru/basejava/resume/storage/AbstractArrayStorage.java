@@ -22,15 +22,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    void checkAbilityForSave(int index, String uuid) {
-        checkElementNotExist(index, uuid);
-        if (size == CAPACITY) {
-            throw new StorageException("Storage overflow", uuid);
-        }
-    }
-
-    @Override
     final void insertAt(Resume resume, int index) {
+
+        if (size == CAPACITY) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
+
         int insPoint = calculateInsertPosition(index);
         prepareStorageForInsert(insPoint);
         storage[insPoint] = resume;

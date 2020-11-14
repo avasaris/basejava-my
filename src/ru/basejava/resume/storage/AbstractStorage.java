@@ -7,12 +7,10 @@ import ru.basejava.resume.model.Resume;
 public abstract class AbstractStorage implements Storage {
     @Override
     public final void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        checkAbilityForSave(index, resume.getUuid());
+        int index = checkElementNotExist(resume.getUuid());
         insertAt(resume, index);
     }
 
-    abstract void checkAbilityForSave(int index, String uuid);
     abstract void insertAt(Resume resume, int index);
 
     @Override
@@ -49,9 +47,11 @@ public abstract class AbstractStorage implements Storage {
 
     abstract int getIndex(String uuid);
 
-    void checkElementNotExist(int index, String uuid) {
+    private int checkElementNotExist(String uuid) {
+        int index = getIndex(uuid);
         if (index >= 0) {
             throw new ExistStorageException(uuid);
         }
+        return index;
     }
 }

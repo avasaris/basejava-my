@@ -25,11 +25,6 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void checkAbilityForSave(int index, String uuid) {
-        checkElementNotExist(index, uuid);
-    }
-
-    @Override
     void insertAt(Resume resume, int index) {
         listStorage.add(resume);
     }
