@@ -25,23 +25,29 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    Object getPointer(String uuid) {
+        int pointer = listStorage.indexOf(new Resume(uuid, ""));
+        return pointer < 0 ? null : pointer;
+    }
+
+    @Override
     void insertAt(int index, Resume resume) {
         listStorage.add(resume);
     }
 
     @Override
-    void deleteAt(int index) {
-        listStorage.remove(index);
+    void deleteAt(Object index) {
+        listStorage.remove((int)index);
     }
 
     @Override
-    void updateAt(int index, Resume resume) {
-        listStorage.set(index, resume);
+    void updateAt(Object index, Resume resume) {
+        listStorage.set((int)index, resume);
     }
 
     @Override
-    Resume getAt(int index) {
-        return listStorage.get(index);
+    Resume getAt(Object index) {
+        return listStorage.get((int)index);
     }
 
     @Override

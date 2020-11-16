@@ -12,6 +12,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
+    Object getPointer(String uuid) {
+        int pointer = Arrays.binarySearch(storage, 0, size, new Resume(uuid, ""));
+        return pointer < 0 ? null : pointer;
+    }
+
+    @Override
     void insertIntoStorage(int index, Resume resume) {
         int insPosition = -index - 1;
         System.arraycopy(storage, insPosition, storage, insPosition + 1, size - insPosition);
