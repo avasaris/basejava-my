@@ -52,6 +52,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    boolean checkIndexNotExist(Object index) {
+        return (int) index < 0;
+    }
+
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }

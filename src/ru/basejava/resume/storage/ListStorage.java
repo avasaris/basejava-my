@@ -20,14 +20,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    int getIndex(String uuid) {
+    Object getPointer(String uuid) {
         return listStorage.indexOf(new Resume(uuid, ""));
     }
 
     @Override
-    Object getPointer(String uuid) {
-        int pointer = listStorage.indexOf(new Resume(uuid, ""));
-        return pointer < 0 ? null : pointer;
+    boolean checkIndexNotExist(Object index) {
+        return (int) index < 0;
     }
 
     @Override
@@ -37,17 +36,17 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     void deleteAt(Object index) {
-        listStorage.remove((int)index);
+        listStorage.remove((int) index);
     }
 
     @Override
     void updateAt(Object index, Resume resume) {
-        listStorage.set((int)index, resume);
+        listStorage.set((int) index, resume);
     }
 
     @Override
     Resume getAt(Object index) {
-        return listStorage.get((int)index);
+        return listStorage.get((int) index);
     }
 
     @Override
