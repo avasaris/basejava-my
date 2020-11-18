@@ -22,11 +22,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    final void insertAt(int index, Resume resume) {
+    boolean checkIndexExist(Object index) {
+        return (int) index >= 0;
+    }
+
+    @Override
+    final void insertAt(Object index, Resume resume) {
         if (size == CAPACITY) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        insertIntoStorage(index, resume);
+        insertIntoStorage((int)  index, resume);
         size++;
     }
 
@@ -34,7 +39,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     final void deleteAt(Object index) {
-        deleteFromStorage((int)index);
+        deleteFromStorage((int) index);
         storage[size - 1] = null;
         size--;
     }
@@ -43,17 +48,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     void updateAt(Object index, Resume resume) {
-        storage[(int)index] = resume;
+        storage[(int) index] = resume;
     }
 
     @Override
     Resume getAt(Object index) {
-        return storage[(int)index];
-    }
-
-    @Override
-    boolean checkIndexNotExist(Object index) {
-        return (int) index < 0;
+        return storage[(int) index];
     }
 
     @Override

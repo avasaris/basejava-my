@@ -25,12 +25,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    boolean checkIndexNotExist(Object index) {
-        return (int) index < 0;
+    boolean checkIndexExist(Object index) {
+        return (int) index >= 0;
     }
 
     @Override
-    void insertAt(int index, Resume resume) {
+    void insertAt(Object index, Resume resume) {
         listStorage.add(resume);
     }
 
