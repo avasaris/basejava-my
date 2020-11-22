@@ -2,8 +2,7 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MapStorage extends AbstractStorage {
 
@@ -50,7 +49,9 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return mapStorage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> storageCopy = new LinkedList<>(mapStorage.values());
+        storageCopy.sort(RESUME_COMPARATOR);
+        return storageCopy;
     }
 }

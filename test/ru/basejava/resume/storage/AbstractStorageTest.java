@@ -87,7 +87,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void clear() {
         storage.clear();
-        Assert.assertArrayEquals(storage.getAll(), new Resume[]{});
+        Assert.assertArrayEquals(storage.getAllSorted().toArray(new Resume[0]), new Resume[]{});
     }
 
     @Test
@@ -96,11 +96,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
+    public void getAllSorted() {
         Resume[] expected = new Resume[]{resume1, resume2, resume3};
         Arrays.sort(expected, RESUME_COMPARATOR);
-        Resume[] actual = storage.getAll();
-        Arrays.sort(actual, RESUME_COMPARATOR);
+        Resume[] actual = storage.getAllSorted().toArray(new Resume[0]);
         Assert.assertArrayEquals(expected, actual);
     }
 }

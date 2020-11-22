@@ -2,8 +2,7 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.model.Resume;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ListStorage extends AbstractStorage {
 
@@ -50,7 +49,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return listStorage.toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> storageCopy = new LinkedList<>(listStorage);
+        storageCopy.sort(RESUME_COMPARATOR);
+        return storageCopy;
     }
 }

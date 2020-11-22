@@ -4,7 +4,12 @@ import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
+import java.util.Comparator;
+
 public abstract class AbstractStorage implements Storage {
+
+    protected static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+
     @Override
     public final void save(Resume resume) {
         Object index = elementNotExist(resume.getUuid());
