@@ -7,15 +7,13 @@ import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class AbstractStorageTest {
     private static final String UUID1 = UUID.randomUUID().toString();
     private static final String UUID2 = UUID.randomUUID().toString();
     private static final String UUID3 = UUID.randomUUID().toString();
-    private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+    private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
 
     final Resume resume1 = new Resume(UUID1, "Alex");
     final Resume resume2 = new Resume(UUID2, "Zed");
@@ -97,9 +95,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        Resume[] expected = new Resume[]{resume1, resume2, resume3};
-        Arrays.sort(expected, RESUME_COMPARATOR);
-        Resume[] actual = storage.getAllSorted().toArray(new Resume[0]);
-        Assert.assertArrayEquals(expected, actual);
+        List<Resume> expected = Arrays.asList(resume1, resume2, resume3);
+        expected.sort(RESUME_COMPARATOR);
+        List<Resume> actual = storage.getAllSorted();
+        Assert.assertEquals(expected, actual);
     }
 }

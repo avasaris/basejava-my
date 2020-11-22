@@ -8,7 +8,13 @@ import java.util.Comparator;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+    public static final Comparator<Resume> RESUME_COMPARATOR = (Resume o1, Resume o2) -> {
+        int compareResult = o1.getFullName().compareTo(o2.getFullName());
+        if (compareResult == 0)
+            return o1.getUuid().compareTo(o2.getUuid());
+        else
+            return compareResult;
+    };
 
     @Override
     public final void save(Resume resume) {
@@ -51,6 +57,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     abstract boolean checkIndexExist(Object index);
+
     abstract Object getPointer(String uuid);
 
     private Object elementNotExist(String uuid) {
