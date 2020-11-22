@@ -4,6 +4,7 @@ import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
@@ -58,9 +59,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] storageCopy = Arrays.copyOf(storage, size);
-        Arrays.sort(storageCopy, RESUME_COMPARATOR);
-        return Arrays.asList(storageCopy);
+    public List<Resume> getStorageAsList() {
+        return new LinkedList<>(Arrays.asList(Arrays.copyOf(storage, size)));
     }
 }

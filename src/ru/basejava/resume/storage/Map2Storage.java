@@ -52,9 +52,7 @@ public class Map2Storage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> storageCopy = new LinkedList<>(mapStorage.values());
-        storageCopy.sort(RESUME_COMPARATOR);
-        return storageCopy;
+    public List<Resume> getStorageAsList() {
+        return new LinkedList<>(mapStorage.values());
     }
 }

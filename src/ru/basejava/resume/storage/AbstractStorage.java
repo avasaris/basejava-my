@@ -5,6 +5,7 @@ import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
@@ -67,4 +68,13 @@ public abstract class AbstractStorage implements Storage {
         }
         return index;
     }
+
+    @Override
+    public final List<Resume> getAllSorted() {
+        List<Resume> storageCopy = getStorageAsList();
+        storageCopy.sort(RESUME_COMPARATOR);
+        return storageCopy;
+    }
+
+    abstract List<Resume> getStorageAsList();
 }
