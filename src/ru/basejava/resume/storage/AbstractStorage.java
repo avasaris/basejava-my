@@ -50,7 +50,7 @@ public abstract class AbstractStorage implements Storage {
     abstract Resume getAt(Object index);
 
     private Object elementExist(String uuid) {
-        Object index = getPointer(uuid);
+        Object index = getSearchKey(uuid);
         if (!checkIndexExist(index)) {
             throw new NotExistStorageException(uuid);
         }
@@ -59,10 +59,10 @@ public abstract class AbstractStorage implements Storage {
 
     abstract boolean checkIndexExist(Object index);
 
-    abstract Object getPointer(String uuid);
+    abstract Object getSearchKey(String uuid);
 
     private Object elementNotExist(String uuid) {
-        Object index = getPointer(uuid);
+        Object index = getSearchKey(uuid);
         if (checkIndexExist(index)) {
             throw new ExistStorageException(uuid);
         }

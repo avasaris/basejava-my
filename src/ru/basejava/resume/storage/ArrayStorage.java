@@ -5,7 +5,7 @@ import ru.basejava.resume.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    Integer getPointer(String uuid) {
+    Integer getSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;

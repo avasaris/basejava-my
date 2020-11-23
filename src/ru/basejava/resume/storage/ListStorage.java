@@ -19,7 +19,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    Object getPointer(String uuid) {
+    Object getSearchKey(String uuid) {
         return listStorage.indexOf(new Resume(uuid, ""));
     }
 

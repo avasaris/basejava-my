@@ -6,50 +6,50 @@ import java.util.*;
 
 public class MapUuidStorage extends AbstractStorage {
 
-    private final Map<String, Resume> mapStorage = new HashMap<>();
+    private final Map<String, Resume> mapUuidStorage = new HashMap<>();
 
     @Override
     public void clear() {
-        mapStorage.clear();
+        mapUuidStorage.clear();
     }
 
     @Override
     public int size() {
-        return mapStorage.size();
+        return mapUuidStorage.size();
     }
 
     @Override
-    Object getPointer(String uuid) {
+    Object getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
     boolean checkIndexExist(Object key) {
-        return mapStorage.containsKey(key);
+        return mapUuidStorage.containsKey(key);
     }
 
     @Override
     void insertAt(Object key, Resume resume) {
-        mapStorage.put((String) key, resume);
+        mapUuidStorage.put((String) key, resume);
     }
 
     @Override
     void deleteAt(Object key) {
-        mapStorage.remove(key);
+        mapUuidStorage.remove(key);
     }
 
     @Override
     void updateAt(Object key, Resume resume) {
-        mapStorage.replace((String) key, resume);
+        mapUuidStorage.replace((String) key, resume);
     }
 
     @Override
     Resume getAt(Object key) {
-        return mapStorage.get(key);
+        return mapUuidStorage.get(key);
     }
 
     @Override
     public List<Resume> getStorageAsList() {
-        return new LinkedList<>(mapStorage.values());
+        return new LinkedList<>(mapUuidStorage.values());
     }
 }
