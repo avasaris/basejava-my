@@ -9,64 +9,61 @@ import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
-    public static final Comparator<Resume> RESUME_COMPARATOR = (Resume o1, Resume o2) -> {
-        int compareResult = o1.getFullName().compareTo(o2.getFullName());
-        if (compareResult == 0)
-            return o1.getUuid().compareTo(o2.getUuid());
-        else
-            return compareResult;
-    };
+    public static final Comparator<Resume> RESUME_COMPARATOR =
+            Comparator
+                    .comparing(Resume::getFullName)
+                    .thenComparing(Resume::getUuid);
 
     @Override
     public final void save(Resume resume) {
-        Object index = elementNotExist(resume.getUuid());
-        insertAt(index, resume);
+        Object searchKey = elementNotExist(resume.getUuid());
+        insertAt(searchKey, resume);
     }
 
-    abstract void insertAt(Object index, Resume resume);
+    abstract void insertAt(Object searchKey, Resume resume);
 
     @Override
     public final void delete(String uuid) {
-        Object index = elementExist(uuid);
-        deleteAt(index);
+        Object searchKey = elementExist(uuid);
+        deleteAt(searchKey);
     }
 
-    abstract void deleteAt(Object index);
+    abstract void deleteAt(Object searchKey);
 
     @Override
     public final void update(Resume resume) {
-        Object index = elementExist(resume.getUuid());
-        updateAt(index, resume);
+        Object searchKey = elementExist(resume.getUuid());
+        updateAt(searchKey, resume);
     }
 
-    abstract void updateAt(Object index, Resume resume);
+    abstract void updateAt(Object searchKey, Resume resume);
 
     @Override
     public final Resume get(String uuid) {
-        Object index = elementExist(uuid);
-        return getAt(index);
+        Object searchKey = elementExist(uuid);
+        return getAt(searchKey);
     }
 
-    abstract Resume getAt(Object index);
+    abstract Resume getAt(Object searchKey);
 
     private Object elementExist(String uuid) {
-        Object index = getSearchKey(uuid);
-        if (!checkIndexExist(index)) {
+        Object searchKey = getSearchKey(uuid);
+        if (!checkKeyExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return index;
+        return searchKey;
     }
 
-    abstract boolean checkIndexExist(Object index);
+    abstract boolean checkKeyExist(Object searchKey);
 
     abstract Object getSearchKey(String uuid);
 
     private Object elementNotExist(String uuid) {
-        Object index = getSearchKey(uuid);
-        if (checkIndexExist(index)) {
+        Object searchKey = getSearchKey(uuid);
+        if (checkKeyExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
-        return index;
+        return searchKey != null ? searchKey : new Resume(uuid, "");
     }
 
     @Override

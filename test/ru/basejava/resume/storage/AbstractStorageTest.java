@@ -13,6 +13,7 @@ public abstract class AbstractStorageTest {
     private static final String UUID1 = UUID.randomUUID().toString();
     private static final String UUID2 = UUID.randomUUID().toString();
     private static final String UUID3 = UUID.randomUUID().toString();
+    private static final String UUID_NOT_EXIST = UUID.randomUUID().toString();
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
 
     final Resume resume1 = new Resume(UUID1, "Alex");
@@ -41,7 +42,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() {
-        storage.get(UUID.randomUUID().toString());
+        storage.get(UUID_NOT_EXIST);
     }
 
     @Test
@@ -53,16 +54,15 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume("Liza Maria"));
+        storage.update(new Resume(UUID_NOT_EXIST,"Liza Maria"));
     }
 
     @Test
     public void save() {
-        String uuidForSave = UUID.randomUUID().toString();
-        Resume resumeForSave = new Resume(uuidForSave, "");
+        Resume resumeForSave = new Resume(UUID_NOT_EXIST, "Karl");
         storage.save(resumeForSave);
         Assert.assertEquals(4, storage.size());
-        Assert.assertEquals(resumeForSave, storage.get(uuidForSave));
+        Assert.assertEquals(resumeForSave, storage.get(UUID_NOT_EXIST));
     }
 
     @Test(expected = ExistStorageException.class)
@@ -79,13 +79,13 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExist() {
-        storage.delete(UUID.randomUUID().toString());
+        storage.delete(UUID_NOT_EXIST);
     }
 
     @Test
     public void clear() {
         storage.clear();
-        Assert.assertArrayEquals(storage.getAllSorted().toArray(new Resume[0]), new Resume[]{});
+        Assert.assertEquals(storage.size(), 0);
     }
 
     @Test

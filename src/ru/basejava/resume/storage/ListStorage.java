@@ -24,7 +24,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    boolean checkIndexExist(Object index) {
+    boolean checkKeyExist(Object index) {
         return (int) index >= 0;
     }
 

@@ -24,7 +24,7 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    boolean checkIndexExist(Object key) {
+    boolean checkKeyExist(Object key) {
         return mapUuidStorage.containsKey(key);
     }
 
