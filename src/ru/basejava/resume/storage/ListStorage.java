@@ -4,7 +4,7 @@ import ru.basejava.resume.model.Resume;
 
 import java.util.*;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     private final List<Resume> listStorage = new LinkedList<>();
 
@@ -19,33 +19,33 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    Object getSearchKey(String uuid) {
+    Integer getSearchKey(String uuid) {
         return listStorage.indexOf(new Resume(uuid, ""));
     }
 
     @Override
-    boolean checkKeyExist(Object index) {
-        return (int) index >= 0;
+    boolean checkKeyExist(Integer index) {
+        return index >= 0;
     }
 
     @Override
-    void insertAt(Object index, Resume resume) {
+    void insertAt(Integer index, Resume resume) {
         listStorage.add(resume);
     }
 
     @Override
-    void deleteAt(Object index) {
-        listStorage.remove((int) index);
+    void deleteAt(Integer index) {
+        listStorage.remove(index.intValue());
     }
 
     @Override
-    void updateAt(Object index, Resume resume) {
-        listStorage.set((int) index, resume);
+    void updateAt(Integer index, Resume resume) {
+        listStorage.set(index, resume);
     }
 
     @Override
-    Resume getAt(Object index) {
-        return listStorage.get((int) index);
+    Resume getAt(Integer index) {
+        return listStorage.get(index);
     }
 
     @Override

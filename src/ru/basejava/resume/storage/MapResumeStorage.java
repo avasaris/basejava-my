@@ -23,20 +23,20 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     Resume getSearchKey(String uuid) {
-        return mapResumeStorage.get(uuid);
+        Resume resume = mapResumeStorage.get(uuid);
+        return resume != null ? resume : new Resume(uuid, "");
     }
 
     @Override
     boolean checkKeyExist(Object resume) {
-        if(resume == null) return false;
-        String uuid = ((Resume) resume).getUuid();
-        return mapResumeStorage.containsKey(uuid);
+        return mapResumeStorage.containsValue(resume);
     }
 
     @Override
     void insertAt(Object resume, Resume newResume) {
         String uuid = ((Resume) resume).getUuid();
         mapResumeStorage.put(uuid, newResume);
+        mapResumeStorage.
     }
 
     @Override
