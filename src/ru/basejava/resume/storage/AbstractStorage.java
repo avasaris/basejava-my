@@ -63,7 +63,7 @@ public abstract class AbstractStorage implements Storage {
         if (checkKeyExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
-        return searchKey != null ? searchKey : new Resume(uuid, "");
+        return searchKey;
     }
 
     @Override
