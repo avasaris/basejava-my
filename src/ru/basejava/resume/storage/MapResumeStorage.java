@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
 
     private final Map<String, Resume> mapResumeStorage = new HashMap<>();
 
@@ -23,37 +23,32 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     Resume getSearchKey(String uuid) {
-        Resume resume = mapResumeStorage.get(uuid);
-        return resume != null ? resume : new Resume(uuid, "");
+        return mapResumeStorage.getOrDefault(uuid, new Resume(uuid,""));
     }
 
     @Override
-    boolean checkKeyExist(Object resume) {
+    boolean checkKeyExist(Resume resume) {
         return mapResumeStorage.containsValue(resume);
     }
 
     @Override
-    void insertAt(Object resume, Resume newResume) {
-        String uuid = ((Resume) resume).getUuid();
-        mapResumeStorage.put(uuid, newResume);
-        mapResumeStorage.
+    void insertAt(Resume resume, Resume newResume) {
+        mapResumeStorage.put(resume.getUuid(), newResume);
     }
 
     @Override
-    void deleteAt(Object resume) {
-        String uuid = ((Resume) resume).getUuid();
-        mapResumeStorage.remove(uuid);
+    void deleteAt(Resume resume) {
+       mapResumeStorage.remove(resume.getUuid());
     }
 
     @Override
-    void updateAt(Object resume, Resume newResume) {
-        String uuid = ((Resume) resume).getUuid();
-        mapResumeStorage.replace(uuid, newResume);
+    void updateAt(Resume resume, Resume newResume) {
+        mapResumeStorage.replace(resume.getUuid(), newResume);
     }
 
     @Override
-    Resume getAt(Object resume) {
-        return (Resume) resume;
+    Resume getAt(Resume resume) {
+        return resume;
     }
 
     @Override

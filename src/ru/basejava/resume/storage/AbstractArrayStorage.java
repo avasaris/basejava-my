@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     static final int CAPACITY = 10_000;
     final Resume[] storage = new Resume[CAPACITY];
     int size = 0;
@@ -24,24 +24,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    boolean checkKeyExist(Object index) {
-        return (int) index >= 0;
+    boolean checkKeyExist(Integer index) {
+        return index >= 0;
     }
 
     @Override
-    final void insertAt(Object index, Resume resume) {
+    final void insertAt(Integer index, Resume resume) {
         if (size == CAPACITY) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        insertIntoStorage((int)  index, resume);
+        insertIntoStorage(index, resume);
         size++;
     }
 
     abstract void insertIntoStorage(int index, Resume resume);
 
     @Override
-    final void deleteAt(Object index) {
-        deleteFromStorage((int) index);
+    final void deleteAt(Integer index) {
+        deleteFromStorage(index);
         storage[size - 1] = null;
         size--;
     }
@@ -49,13 +49,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     abstract void deleteFromStorage(int index);
 
     @Override
-    void updateAt(Object index, Resume resume) {
-        storage[(int) index] = resume;
+    void updateAt(Integer index, Resume resume) {
+        storage[index] = resume;
     }
 
     @Override
-    Resume getAt(Object index) {
-        return storage[(int) index];
+    Resume getAt(Integer index) {
+        return storage[index];
     }
 
     @Override

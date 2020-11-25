@@ -4,7 +4,7 @@ import ru.basejava.resume.model.Resume;
 
 import java.util.*;
 
-public class MapUuidStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage<String> {
 
     private final Map<String, Resume> mapUuidStorage = new HashMap<>();
 
@@ -19,32 +19,32 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    Object getSearchKey(String uuid) {
+    String getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    boolean checkKeyExist(Object key) {
+    boolean checkKeyExist(String key) {
         return mapUuidStorage.containsKey(key);
     }
 
     @Override
-    void insertAt(Object key, Resume resume) {
-        mapUuidStorage.put((String) key, resume);
+    void insertAt(String key, Resume resume) {
+        mapUuidStorage.put(key, resume);
     }
 
     @Override
-    void deleteAt(Object key) {
+    void deleteAt(String key) {
         mapUuidStorage.remove(key);
     }
 
     @Override
-    void updateAt(Object key, Resume resume) {
-        mapUuidStorage.replace((String) key, resume);
+    void updateAt(String key, Resume resume) {
+        mapUuidStorage.replace(key, resume);
     }
 
     @Override
-    Resume getAt(Object key) {
+    Resume getAt(String key) {
         return mapUuidStorage.get(key);
     }
 

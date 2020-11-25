@@ -63,6 +63,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         if (checkKeyExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
+        return searchKey;
     }
 
     @Override
