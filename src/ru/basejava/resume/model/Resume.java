@@ -1,11 +1,14 @@
 package ru.basejava.resume.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Resume {
 
     private final String uuid;
     private String fullName;
+    public Map<SectionType, Object> sections = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
