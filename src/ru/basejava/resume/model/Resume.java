@@ -8,7 +8,8 @@ public class Resume {
 
     private final String uuid;
     private String fullName;
-    public Map<SectionType, Object> sections = new HashMap<>();
+    public Map<SectionType, AbstractSection> sections = new HashMap<>();
+    public Map<ContactType, String> contacts = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
