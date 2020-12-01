@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public  class ListStringSection implements AbstractSection {
+public  class BulletedListSection implements Section {
     private final List<String> value = new ArrayList<>();
 
-    public ListStringSection(String... strings) {
+    public BulletedListSection(String... strings) {
         this.value.addAll(Arrays.asList(strings));
     }
 

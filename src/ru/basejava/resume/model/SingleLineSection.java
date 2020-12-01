@@ -1,9 +1,9 @@
 package ru.basejava.resume.model;
 
-public class StringSection implements AbstractSection {
+public class SingleLineSection implements Section {
     private final String value;
 
-    public StringSection(String value) {
+    public SingleLineSection(String value) {
         this.value = value;
     }
 

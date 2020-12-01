@@ -1,4 +1,4 @@
 package ru.basejava.resume.model;
 
-public interface AbstractSection {
+public interface Section {
 }
