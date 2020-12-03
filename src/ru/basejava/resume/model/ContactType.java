@@ -1,9 +1,9 @@
 package ru.basejava.resume.model;
 
 public enum ContactType {
-    PHONE("Тел: "),
-    SKYPE("Skype: "),
-    EMAIL("Почта: "),
+    PHONE("Тел"),
+    SKYPE("Skype"),
+    EMAIL("Почта"),
     LINKEDIN("Профиль LinkedIn"),
     GITHUB("Профиль GitHub"),
     STACKOVERFLOW("Профиль Stackoverflow"),

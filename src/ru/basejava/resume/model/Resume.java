@@ -1,6 +1,5 @@
 package ru.basejava.resume.model;
 
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,8 +7,8 @@ public class Resume {
 
     private final String uuid;
     private String fullName;
-    public Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-    public Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, Section> sections;
+    private Map<ContactType, String> contacts;
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -20,32 +19,35 @@ public class Resume {
         this.fullName = fullName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public Resume(String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
+        this(fullName);
+        this.contacts = contacts;
+        this.sections = sections;
     }
 
     public String getUuid() {
         return uuid;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        Resume resume = (Resume) o;
-//
-//        return uuid.equals(resume.uuid);
-//    }
+    public String getFullName() {
+        return fullName;
+    }
 
-//    @Override
-//    public int hashCode() {
-//        return uuid.hashCode();
-//    }
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(Map<SectionType, Section> sections) {
+        this.sections = sections;
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Map<ContactType, String> contacts) {
+        this.contacts = contacts;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -54,14 +56,17 @@ public class Resume {
 
         Resume resume = (Resume) o;
 
-     //   if (!uuid.equals(resume.uuid)) return false;
-     //   return fullName.equals(resume.fullName);
-        return uuid.equals(resume.uuid);
+        if (!uuid.equals(resume.uuid)) return false;
+        if (!sections.equals(resume.sections)) return false;
+        if (!contacts.equals(resume.contacts)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
+        result = 31 * result + sections.hashCode();
+        result = 31 * result + contacts.hashCode();
         result = 31 * result + fullName.hashCode();
         return result;
     }
