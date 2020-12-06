@@ -2,7 +2,8 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.model.Resume;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage<Integer> {
 
@@ -20,16 +21,14 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     Integer getSearchKey(String uuid) {
-        int index = -1;
-        int counter = 0;
-        for(Resume resume: listStorage){
-            if(uuid.equals(resume.getUuid())) {
-                index = counter;
+        int key = -1;
+        for (int i = 0; i < listStorage.size(); i++) {
+            if (uuid.equals(listStorage.get(i).getUuid())) {
+                key = i;
                 break;
             }
-            counter++;
         }
-        return index;
+        return key;
     }
 
     @Override

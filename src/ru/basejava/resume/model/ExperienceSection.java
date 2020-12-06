@@ -5,16 +5,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class ExperienceSection implements Section {
-    private final List<Experience> storage = new ArrayList<>();
+    private final List<Experience> experiences = new ArrayList<>();
 
     public ExperienceSection(Experience ...experiences) {
-        Collections.addAll(this.storage, experiences);
+        Collections.addAll(this.experiences, experiences);
     }
 
     @Override
     public String toString() {
         StringBuilder experienceString = new StringBuilder();
-        for(Experience element:storage){
+        for(Experience element: experiences){
             experienceString.append(element.toString());
             experienceString.append("\n");
         }
