@@ -33,9 +33,12 @@ public class ResumeTestData {
                 "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
                 "Version control: Subversion, Git, Mercury, ClearCase, Perforce"));
 
+        Organisations organisations = Organisations.getInstance();
+
+        System.out.println(organisations);
+
         Experience experience = new Experience(
-                "Java Online Projects",
-                "http://javaops.ru/",
+                organisations.get("Java Online Projects", "http://javaops.ru/"),
                 YearMonth.now(),
                 YearMonth.now(),
                 "Автор проекта.",
@@ -43,15 +46,19 @@ public class ResumeTestData {
 
         sections.put(SectionType.EXPERIENCE, new ExperienceSection(experience));
 
+        System.out.println(organisations);
+
         Experience education = new Experience(
-                "Coursera",
-                "https://www.coursera.org/course/progfun",
+                //organisations.get("Coursera", "https://www.coursera.org/course/progfun"),
+                organisations.get("Java Online Projects", "http://javaops.ru/"),
                 YearMonth.now(),
                 YearMonth.now(),
                 "\"Functional Programming Principles in Scala\" by Martin Odersky",
                 "");
 
         sections.put(SectionType.EDUCATION, new ExperienceSection(education));
+
+        System.out.println(organisations);
 
         Resume resume = new Resume("Resume Test Data", contacts, sections);
 
