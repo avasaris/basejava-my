@@ -7,6 +7,29 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class ResumeTestData {
+    private static final String[] phones = {"+7(921) 855-0482", "+7(223) 445-2020", "+7(223) 000-0010", "+7(552) 938-8726"};
+    private static final String[] skypes = {"anton.belov", "grigory.kislin", "sergey.ivanov", "petr.tolstoy"};
+    private static final String[] emails = {"anton@belov.ru", "grigory@kislin.org", "sergey@ivanov.com", "petr@tolstoy.net"};
+    private static final String[] nicNames = {"abelov1995", "gkislin", "s_ivanov", "petr-tolst"};
+    private static final String[] homePages = {"http://anton.belov.ru/", "http://grigory.kislin.ru", "https://sergey.ivanov", "https://petr.tolstoy.net"};
+    private static final String[] SingleLineSections = {};
+
+    public static void generateRandomResume(String uuid, String fullName) {
+
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+
+        contacts.put(ContactType.PHONE, getRandom(phones));
+        contacts.put(ContactType.SKYPE, getRandom(skypes));
+        contacts.put(ContactType.EMAIL, getRandom(emails));
+        contacts.put(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + getRandom(nicNames));
+        contacts.put(ContactType.GITHUB, "https://github.com/" + getRandom(nicNames));
+        contacts.put(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/" + getRandom(nicNames));
+        contacts.put(ContactType.HOMEPAGE, getRandom(homePages));
+
+
+    }
+
+
     public static void main(String[] args) {
 
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
@@ -87,5 +110,7 @@ public class ResumeTestData {
         }
     }
 
-
+    private static String getRandom(String[] array) {
+        return array[(int)(System.currentTimeMillis() % array.length)];
+    }
 }

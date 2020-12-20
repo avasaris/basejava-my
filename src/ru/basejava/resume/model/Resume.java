@@ -25,6 +25,12 @@ public class Resume {
         this.sections = sections;
     }
 
+    public Resume(String uuid, String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
+        this(uuid, fullName);
+        this.contacts = contacts;
+        this.sections = sections;
+    }
+
     public String getUuid() {
         return uuid;
     }
