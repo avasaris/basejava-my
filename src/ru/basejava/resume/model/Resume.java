@@ -79,6 +79,11 @@ public class Resume {
 
     @Override
     public String toString() {
-        return "UUID = " + uuid + " fullName = " + fullName;
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", sections=" + sections +
+                ", contacts=" + contacts +
+                '}';
     }
 }
