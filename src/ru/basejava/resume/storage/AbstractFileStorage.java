@@ -5,11 +5,12 @@ import ru.basejava.resume.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+    private final File directory;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory);
@@ -24,13 +25,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     void insertAt(File file, Resume resume) {
-
+        boolean opResult;
         try {
-            file.createNewFile();
+            opResult = file.createNewFile();
             doWrite(file, resume);
         } catch (IOException e) {
             throw new StorageException("Can't save resume to file.", file.getName(), e);
         }
+        if(!opResult) throw new StorageException("Can't save resume to file. File already exists.", file.getName());
     }
 
     protected abstract void doWrite(File file, Resume resume) throws IOException;
@@ -53,9 +55,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     Resume getAt(File file) {
-        // abstract doRead()
-        return null;
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("Can't read resume from file.", file.getName(), e);
+        }
     }
+
+    protected abstract Resume doRead(File file) throws IOException;
 
     @Override
     boolean checkKeyExist(File file) {
@@ -69,18 +76,39 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     List<Resume> getStorageAsList() {
-        // return all files (use doRead()) from directory
-        return null;
+        final File[] files = directory.listFiles();
+        List<Resume> fileList = new LinkedList<>();
+        if (files == null) return fileList;
+        for (File file : files) {
+            if (!file.isFile()) continue;
+            try {
+                fileList.add(doRead(file));
+            } catch (IOException e) {
+                throw new StorageException("Can't read resume from file.", file.getName(), e);
+            }
+        }
+        return fileList;
     }
 
     @Override
     public void clear() {
-        // delete all files into directory
+        final File[] files = directory.listFiles();
+        if (files == null) return;
+        for (File file : files) {
+            if (!file.isFile()) continue;
+            if (!file.delete()) throw new StorageException("Can't clear directory.", directory.getName());
+        }
     }
 
     @Override
     public int size() {
-        // count files in directory
-        return 0;
+        final File[] files = directory.listFiles();
+        int counter = 0;
+        if (files == null) return counter;
+        for (File file : files) {
+            if (!file.isFile()) continue;
+            counter++;
+        }
+        return counter;
     }
 }
