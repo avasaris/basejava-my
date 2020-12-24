@@ -44,7 +44,7 @@ public class Experience {
         if (!begin.equals(that.begin)) return false;
         if (!end.equals(that.end)) return false;
         if (!header.equals(that.header)) return false;
-        return description != null ? description.equals(that.description) : that.description == null;
+        return Objects.equals(description, that.description);
     }
 
     @Override

@@ -15,7 +15,7 @@ public  class BulletedListSection implements Section {
 
     @Override
     public String toString() {
-        return "* " + String.join("\n\t* ", value);
+        return "* " + String.join("\n* ", value);
     }
 
     @Override

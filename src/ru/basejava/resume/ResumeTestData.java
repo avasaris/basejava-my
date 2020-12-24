@@ -6,6 +6,7 @@ import java.time.YearMonth;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 public class ResumeTestData {
     private static final String[] phones = {"+7(921) 855-0482", "+7(223) 445-2020", "+7(223) 000-0010", "+7(552) 938-8726"};
@@ -62,7 +63,7 @@ public class ResumeTestData {
     };
     private static final Random random = new Random();
 
-    public static Resume generateRandomResume(String fullName) {
+    public static Resume generateRandomResume(String uuid, String fullName) {
 
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
@@ -120,14 +121,11 @@ public class ResumeTestData {
 
         sections.put(SectionType.EDUCATION, new ExperienceSection(allEducations));
 
-        return new Resume(fullName, contacts, sections);
+        return new Resume(uuid, fullName, contacts, sections);
     }
 
-
-    public static void main(String[] args) {
-
-         Resume resume = generateRandomResume("Resume Test Data");
-
+    public static void printResume(Resume resume) {
+        System.out.println("\n=============== "+resume.getFullName()+ " ===============");
         for (ContactType contactType : ContactType.values()) {
             String contact;
             String title = contactType.getTitle();
@@ -151,6 +149,13 @@ public class ResumeTestData {
         for (SectionType section : SectionType.values()) {
             System.out.println(section.getTitle() + ":\n" + resume.getSections().get(section));
         }
+    }
+
+    public static void main(String[] args) {
+
+        Resume resume = generateRandomResume(UUID.randomUUID().toString(), "Resume Test Data");
+        printResume(resume);
+
     }
 
     private static String getRandom(String[] array) {

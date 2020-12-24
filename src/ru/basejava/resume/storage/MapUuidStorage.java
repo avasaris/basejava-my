@@ -2,7 +2,10 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.model.Resume;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class MapUuidStorage extends AbstractStorage<String> {
 

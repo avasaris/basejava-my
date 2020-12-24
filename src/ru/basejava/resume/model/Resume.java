@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Resume {
 
     private final String uuid;
-    private String fullName;
+    private final String fullName;
     private Map<SectionType, Section> sections;
     private Map<ContactType, String> contacts;
 
@@ -17,12 +17,6 @@ public class Resume {
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
         this.fullName = fullName;
-    }
-
-    public Resume(String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
-        this(fullName);
-        this.contacts = contacts;
-        this.sections = sections;
     }
 
     public Resume(String uuid, String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {

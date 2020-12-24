@@ -20,7 +20,7 @@ public class ExperienceSection implements Section {
             experienceString.append(element.toString());
             experienceString.append("\n");
         }
-        return experienceString.toString();
+        return experienceString.toString().trim();
     }
 
     @Override

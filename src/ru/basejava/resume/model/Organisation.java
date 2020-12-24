@@ -36,7 +36,7 @@ public class Organisation {
         Organisation link = (Organisation) o;
 
         if (!name.equals(link.name)) return false;
-        return url != null ? url.equals(link.url) : link.url == null;
+        return Objects.equals(url, link.url);
     }
 
     @Override
