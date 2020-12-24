@@ -2,11 +2,11 @@ package ru.basejava.resume.model;
 
 import java.util.Objects;
 
-public class Organisation {
+public class Link {
     private final String name;
     private final String url;
 
-    public Organisation(String name, String url) {
+    public Link(String name, String url) {
         Objects.requireNonNull(name, "Name of the URL shouldn't be null");
         this.name = name;
         this.url = url;
@@ -22,10 +22,7 @@ public class Organisation {
 
     @Override
     public String toString() {
-        return "Organisation{" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                '}';
+        return "-> " + name + '(' + url + ')';
     }
 
     @Override
@@ -33,7 +30,7 @@ public class Organisation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Organisation link = (Organisation) o;
+        Link link = (Link) o;
 
         if (!name.equals(link.name)) return false;
         return Objects.equals(url, link.url);

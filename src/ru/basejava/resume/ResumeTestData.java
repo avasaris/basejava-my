@@ -3,10 +3,7 @@ package ru.basejava.resume;
 import ru.basejava.resume.model.*;
 
 import java.time.YearMonth;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class ResumeTestData {
     private static final String[] phones = {"+7(921) 855-0482", "+7(223) 445-2020", "+7(223) 000-0010", "+7(552) 938-8726"};
@@ -147,15 +144,24 @@ public class ResumeTestData {
         }
 
         for (SectionType section : SectionType.values()) {
-            System.out.println(section.getTitle() + ":\n" + resume.getSections().get(section));
+            System.out.println("\n"+section.getTitle());
+            if(!section.equals(SectionType.EXPERIENCE) && !section.equals(SectionType.EDUCATION)){
+                System.out.println(resume.getSections().get(section));
+            }else {
+                Map<Link, List<Experience>> experiences = ((ExperienceSection) resume.getSections().get(section)).getExperiences();
+                for (Link link : experiences.keySet()) {
+                    System.out.println(link);
+                    for (Experience list : experiences.get(link)) {
+                        System.out.println(list);
+                    }
+                }
+            }
         }
     }
 
     public static void main(String[] args) {
-
         Resume resume = generateRandomResume(UUID.randomUUID().toString(), "Resume Test Data");
         printResume(resume);
-
     }
 
     private static String getRandom(String[] array) {

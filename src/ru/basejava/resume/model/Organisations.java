@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Organisations {
     private static Organisations instance;
-    private final Map<Integer, Organisation> storage = new HashMap<>();
+    private final Map<Integer, Link> storage = new HashMap<>();
 
     private Organisations() {
     }
@@ -17,10 +17,10 @@ public class Organisations {
         return instance;
     }
 
-    public Organisation get(String name, String url){
-        Organisation organisation = new Organisation(name, url);
-        int key = organisation.hashCode();
-        storage.putIfAbsent(key, organisation);
+    public Link get(String name, String url){
+        Link link = new Link(name, url);
+        int key = link.hashCode();
+        storage.putIfAbsent(key, link);
         return storage.get(key);
     }
 

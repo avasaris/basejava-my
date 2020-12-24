@@ -1,40 +1,26 @@
 package ru.basejava.resume.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ExperienceSection implements Section {
-    private final List<Experience> experiences = new ArrayList<>();
+    private final Map<Link, List<Experience>> experiences = new HashMap<>();
 
     public ExperienceSection(Experience ...experiences) {
         Objects.requireNonNull(experiences, "Experience or education shouldn't be null.");
-        Collections.addAll(this.experiences, experiences);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder experienceString = new StringBuilder();
-        for(Experience element: experiences){
-            experienceString.append(element.toString());
-            experienceString.append("\n");
+        for (Experience experience : experiences) {
+            if(this.experiences.containsKey(experience.getLink())){
+                List<Experience> list = this.experiences.get(experience.getLink());
+                list.add(experience);
+                this.experiences.put(experience.getLink(), list);
+            } else {
+                List<Experience> list = new ArrayList<>();
+                list.add(experience);
+                this.experiences.put(experience.getLink(), list);
+            }
         }
-        return experienceString.toString().trim();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ExperienceSection that = (ExperienceSection) o;
-
-        return experiences.equals(that.experiences);
-    }
-
-    @Override
-    public int hashCode() {
-        return experiences.hashCode();
+    public Map<Link, List<Experience>> getExperiences() {
+        return experiences;
     }
 }
