@@ -3,24 +3,28 @@ package ru.basejava.resume.model;
 import java.util.*;
 
 public class ExperienceSection implements Section {
-    private final Map<Link, List<Experience>> experiences = new HashMap<>();
+    private final Link link;
+    private final List<Experience> experiences = new ArrayList<>();
 
-    public ExperienceSection(Experience ...experiences) {
+    public ExperienceSection(Link link, Experience ...experiences) {
+        Objects.requireNonNull(link, "Link to organisation shouldn't be null.");
         Objects.requireNonNull(experiences, "Experience or education shouldn't be null.");
-        for (Experience experience : experiences) {
-            if(this.experiences.containsKey(experience.getLink())){
-                List<Experience> list = this.experiences.get(experience.getLink());
-                list.add(experience);
-                this.experiences.put(experience.getLink(), list);
-            } else {
-                List<Experience> list = new ArrayList<>();
-                list.add(experience);
-                this.experiences.put(experience.getLink(), list);
-            }
-        }
+        this.link = link;
+        Collections.addAll(this.experiences, experiences);
     }
 
-    public Map<Link, List<Experience>> getExperiences() {
+    public Link getLink() {
+        return link;
+    }
+
+    public List<Experience> getExperiences() {
         return experiences;
+    }
+
+    @Override
+    public String toString() {
+        return "ExperienceSection{" +
+                "link=" + link +
+                '}';
     }
 }
