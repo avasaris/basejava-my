@@ -8,9 +8,9 @@ import java.util.Objects;
 public  class BulletedListSection implements Section {
     private final List<String> value = new ArrayList<>();
 
-    public BulletedListSection(String... strings) {
-        Objects.requireNonNull(strings, "Qualification or achievement shouldn't be null");
-        this.value.addAll(Arrays.asList(strings));
+    public BulletedListSection(String... items) {
+        Objects.requireNonNull(items, "Qualification or achievement shouldn't be null");
+        this.value.addAll(Arrays.asList(items));
     }
 
     @Override

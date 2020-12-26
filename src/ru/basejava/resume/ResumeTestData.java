@@ -59,7 +59,6 @@ public class ResumeTestData {
             "Alcatel", "http://www.alcatel.ru/", "1997-09", "1998-03", "6 месяцев обучения цифровым телефонным сетям (Москва)"
     };
     private static final Random random = new Random();
-    private static final Organisations organisations = Organisations.getInstance();
 
     public static Resume generateRandomResume(String uuid, String fullName) {
 
@@ -83,51 +82,41 @@ public class ResumeTestData {
 
         int experiencesCount = 3;
 
-        Link link = null;
-
-        Experience[] allExperiences = new Experience[experiencesCount];
         for (int i = 0; i < experiencesCount; i++) {
-            int randomExperience = random.nextInt(educations.length / 6) * 6;
+            int randomExperience = random.nextInt(experiences.length / 6) * 6;
 
-            Experience experience = new Experience(
+            Organisation.Position position = new Organisation.Position(
                     YearMonth.parse(experiences[randomExperience + 2]),
                     YearMonth.parse(experiences[randomExperience + 3]),
                     experiences[randomExperience + 4],
                     experiences[randomExperience + 5]);
 
-            allExperiences[i] = experience;
+            Link link = new Link(experiences[randomExperience], experiences[randomExperience + 1]);
 
-            link = organisations.get(experiences[randomExperience],experiences[randomExperience + 1]);
-
+            sections.put(SectionType.EXPERIENCE, new Organisation(link, position));
         }
-
-        sections.put(SectionType.EXPERIENCE, new ExperienceSection(link, allExperiences));
 
         int educationsCount = 3;
 
-        Experience[] allEducations = new Experience[educationsCount];
         for (int i = 0; i < educationsCount; i++) {
             int randomEducation = random.nextInt(educations.length / 5) * 5;
 
-            Experience education = new Experience(
+            Organisation.Position education = new Organisation.Position(
                     YearMonth.parse(educations[randomEducation + 2]),
                     YearMonth.parse(educations[randomEducation + 3]),
                     educations[randomEducation + 4],
                     "");
 
-            allEducations[i] = education;
+            Link link = new Link(educations[randomEducation], educations[randomEducation + 1]);
 
-            link = organisations.get(experiences[randomEducation],experiences[randomEducation + 1]);
-
+            sections.put(SectionType.EDUCATION, new Organisation(link, education));
         }
-
-        sections.put(SectionType.EDUCATION, new ExperienceSection(link, allEducations));
 
         return new Resume(uuid, fullName, contacts, sections);
     }
 
     public static void printResume(Resume resume) {
-        System.out.println("\n=============== "+resume.getFullName()+ " ===============");
+        System.out.println("\n=============== " + resume.getFullName() + " ===============");
         for (ContactType contactType : ContactType.values()) {
             String contact;
             String title = contactType.getTitle();
@@ -149,15 +138,15 @@ public class ResumeTestData {
         }
 
         for (SectionType sectionType : SectionType.values()) {
-            System.out.println("\n"+sectionType.getTitle());
-            if(!sectionType.equals(SectionType.EXPERIENCE) && !sectionType.equals(SectionType.EDUCATION)){
+            System.out.println("\n" + sectionType.getTitle());
+            if (!sectionType.equals(SectionType.EXPERIENCE) && !sectionType.equals(SectionType.EDUCATION)) {
                 System.out.println(resume.getSections().get(sectionType));
-            }else {
-                ExperienceSection section = (ExperienceSection) resume.getSections().get(sectionType);
+            } else {
+                Organisation section = (Organisation) resume.getSections().get(sectionType);
                 System.out.println(section);
-                List<Experience> experiences = section.getExperiences();
-                for (Experience experience : experiences) {
-                    System.out.println(experience);
+                List<Organisation.Position> positions = section.getExperiences();
+                for (Organisation.Position position : positions) {
+                    System.out.println(position);
                 }
             }
         }

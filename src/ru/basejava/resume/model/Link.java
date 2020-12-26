@@ -12,17 +12,12 @@ public class Link {
         this.url = url;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
     @Override
     public String toString() {
-        return name + '(' + url + ')';
+        return "Link{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 
     @Override
