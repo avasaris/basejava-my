@@ -3,7 +3,7 @@ package ru.basejava.resume.model;
 import java.time.YearMonth;
 import java.util.*;
 
-public class Organisation implements Section {
+public class Organisation{
     private final Link link;
     private final List<Position> positions = new ArrayList<>();
 
@@ -14,7 +14,7 @@ public class Organisation implements Section {
         Collections.addAll(this.positions, positions);
     }
 
-    public List<Position> getExperiences() {
+    public List<Position> getPositions() {
         return positions;
     }
 

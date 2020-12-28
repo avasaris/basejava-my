@@ -144,7 +144,7 @@ public class ResumeTestData {
             } else {
                 Organisation section = (Organisation) resume.getSections().get(sectionType);
                 System.out.println(section);
-                List<Organisation.Position> positions = section.getExperiences();
+                List<Organisation.Position> positions = section.getPositions();
                 for (Organisation.Position position : positions) {
                     System.out.println(position);
                 }
