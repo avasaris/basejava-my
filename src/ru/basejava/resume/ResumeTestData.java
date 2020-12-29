@@ -82,6 +82,8 @@ public class ResumeTestData {
 
         int experiencesCount = 3;
 
+        OrganisationSection experienceSection = new OrganisationSection();
+
         for (int i = 0; i < experiencesCount; i++) {
             int randomExperience = random.nextInt(experiences.length / 6) * 6;
 
@@ -93,15 +95,22 @@ public class ResumeTestData {
 
             Link link = new Link(experiences[randomExperience], experiences[randomExperience + 1]);
 
-            sections.put(SectionType.EXPERIENCE, new Organisation(link, position));
+            Organisation organisation = new Organisation(link, position);
+
+            experienceSection.add(organisation);
         }
 
-        int educationsCount = 3;
+        sections.put(SectionType.EXPERIENCE, experienceSection);
+
+
+        int educationsCount = 4;
+
+        OrganisationSection educationSection = new OrganisationSection();
 
         for (int i = 0; i < educationsCount; i++) {
             int randomEducation = random.nextInt(educations.length / 5) * 5;
 
-            Organisation.Position education = new Organisation.Position(
+            Organisation.Position position = new Organisation.Position(
                     YearMonth.parse(educations[randomEducation + 2]),
                     YearMonth.parse(educations[randomEducation + 3]),
                     educations[randomEducation + 4],
@@ -109,8 +118,13 @@ public class ResumeTestData {
 
             Link link = new Link(educations[randomEducation], educations[randomEducation + 1]);
 
-            sections.put(SectionType.EDUCATION, new Organisation(link, education));
+            Organisation organisation = new Organisation(link, position);
+
+            educationSection.add(organisation);
+
         }
+
+        sections.put(SectionType.EDUCATION, educationSection);
 
         return new Resume(uuid, fullName, contacts, sections);
     }
@@ -142,11 +156,14 @@ public class ResumeTestData {
             if (!sectionType.equals(SectionType.EXPERIENCE) && !sectionType.equals(SectionType.EDUCATION)) {
                 System.out.println(resume.getSections().get(sectionType));
             } else {
-                Organisation section = (Organisation) resume.getSections().get(sectionType);
+                OrganisationSection section = (OrganisationSection) resume.getSections().get(sectionType);
                 System.out.println(section);
-                List<Organisation.Position> positions = section.getPositions();
-                for (Organisation.Position position : positions) {
-                    System.out.println(position);
+                List<Organisation> organisations = section.getOrganisations();
+                for (Organisation organisation : organisations) {
+                    List<Organisation.Position> positions = organisation.getPositions();
+                    for (Organisation.Position position : positions) {
+                        System.out.println(position);
+                    }
                 }
             }
         }
