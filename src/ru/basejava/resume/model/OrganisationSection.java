@@ -31,4 +31,19 @@ public class OrganisationSection extends Section {
                 "organisations=" + organisations +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrganisationSection that = (OrganisationSection) o;
+
+        return organisations.equals(that.organisations);
+    }
+
+    @Override
+    public int hashCode() {
+        return organisations.hashCode();
+    }
 }

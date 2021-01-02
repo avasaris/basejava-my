@@ -2,7 +2,10 @@ package ru.basejava.resume.model;
 
 import java.io.Serializable;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class Organisation implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -27,6 +30,24 @@ public class Organisation implements Serializable {
                 "link=" + link +
                 ",\n\t positions=" + positions +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Organisation that = (Organisation) o;
+
+        if (!link.equals(that.link)) return false;
+        return positions.equals(that.positions);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = link.hashCode();
+        result = 31 * result + positions.hashCode();
+        return result;
     }
 
     public static class Position implements Serializable {
