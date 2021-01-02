@@ -20,8 +20,9 @@ public class Organisation{
 
     @Override
     public String toString() {
-        return "Organisation{" +
+        return "\nOrganisation{" +
                 "link=" + link +
+                ",\n\t positions=" + positions +
                 '}';
     }
 
@@ -48,7 +49,7 @@ public class Organisation{
                     ", end=" + end +
                     ", header='" + header + '\'' +
                     ", description='" + description + '\'' +
-                    '}';
+                    "}\n";
         }
 
         @Override
