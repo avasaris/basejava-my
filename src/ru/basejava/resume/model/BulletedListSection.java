@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public  class BulletedListSection implements Section {
+public  class BulletedListSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private final List<String> value = new ArrayList<>();
 
     public BulletedListSection(String... items) {

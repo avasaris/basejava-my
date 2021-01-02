@@ -9,6 +9,8 @@ public enum ContactType {
     STACKOVERFLOW("Профиль Stackoverflow"),
     HOMEPAGE("Домашняя страница");
 
+    private static final long serialVersionUID = 1L;
+
     private final String title;
 
     ContactType(String title) {

@@ -1,9 +1,11 @@
 package ru.basejava.resume.model;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
-public class Resume {
+public class Resume implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final String uuid;
     private final String fullName;

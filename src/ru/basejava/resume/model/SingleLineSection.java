@@ -2,7 +2,9 @@ package ru.basejava.resume.model;
 
 import java.util.Objects;
 
-public class SingleLineSection implements Section {
+public class SingleLineSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private final String value;
 
     public SingleLineSection(String value) {

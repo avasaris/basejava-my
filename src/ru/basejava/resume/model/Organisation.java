@@ -1,9 +1,12 @@
 package ru.basejava.resume.model;
 
+import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.*;
 
-public class Organisation{
+public class Organisation implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Link link;
     private final List<Position> positions = new ArrayList<>();
 
@@ -26,7 +29,9 @@ public class Organisation{
                 '}';
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final YearMonth begin;
         private final YearMonth end;
         private final String header;

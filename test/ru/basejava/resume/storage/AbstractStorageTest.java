@@ -7,6 +7,7 @@ import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +21,8 @@ public abstract class AbstractStorageTest {
     private static final String UUID3 = UUID.randomUUID().toString();
     private static final String UUID_NOT_EXIST = UUID.randomUUID().toString();
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
+
+    protected static final File STORAGE_DIR = new File("storage");
 
     final Resume resume1 = generateRandomResume(UUID1, "Alex");
     final Resume resume2 = generateRandomResume(UUID2, "Zed");

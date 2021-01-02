@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OrganisationSection implements Section {
+public class OrganisationSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private final List<Organisation> organisations = new ArrayList<>();
 
     public OrganisationSection(Organisation ...organisations) {
