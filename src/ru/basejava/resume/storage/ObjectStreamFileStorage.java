@@ -5,8 +5,8 @@ import ru.basejava.resume.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
-    protected ObjectStreamStorage(File directory) {
+public class ObjectStreamFileStorage extends AbstractFileStorage {
+    protected ObjectStreamFileStorage(String directory) {
         super(directory);
     }
 

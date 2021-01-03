@@ -11,7 +11,8 @@ import java.util.Objects;
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
 
-    protected AbstractFileStorage(File directory) {
+    protected AbstractFileStorage(String dir) {
+        directory = new File(dir);
         Objects.requireNonNull(directory);
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " isn't directory path");
@@ -19,7 +20,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " isn't accessible for R/W");
         }
-        this.directory = directory;
     }
 
     protected abstract void doWrite(OutputStream os, Resume resume) throws IOException;
