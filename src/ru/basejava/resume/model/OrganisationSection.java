@@ -9,11 +9,11 @@ public class OrganisationSection extends Section {
 
     private final List<Organisation> organisations = new ArrayList<>();
 
-    public OrganisationSection(Organisation ...organisations) {
+    public OrganisationSection(Organisation... organisations) {
         Collections.addAll(this.organisations, organisations);
     }
 
-    public void add(Organisation organisation){
+    public void add(Organisation organisation) {
         organisations.add(organisation);
     }
 

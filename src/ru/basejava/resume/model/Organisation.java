@@ -10,13 +10,14 @@ import java.util.Objects;
 public class Organisation implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final Link link;
+    private final LinksList.Link link;
     private final List<Position> positions = new ArrayList<>();
 
-    public Organisation(Link link, Position... positions) {
+    public Organisation(LinksList.Link link, Position... positions) {
         Objects.requireNonNull(link, "Link to organisation shouldn't be null.");
         Objects.requireNonNull(positions, "Position or education shouldn't be null.");
-        this.link = LinksList.get(link);
+        LinksList ll = LinksList.getInstance();
+        this.link = ll.get(link);
         Collections.addAll(this.positions, positions);
     }
 
@@ -59,9 +60,9 @@ public class Organisation implements Serializable {
         private final String description;
 
         public Position(YearMonth begin, YearMonth end, String header, String description) {
-            Objects.requireNonNull(begin, "Position.begin sould't be null");
-            Objects.requireNonNull(end, "Position.end sould't be null");
-            Objects.requireNonNull(header, "Position.header sould't be null");
+            Objects.requireNonNull(begin, "Position.begin shouldn't be null");
+            Objects.requireNonNull(end, "Position.end shouldn't be null");
+            Objects.requireNonNull(header, "Position.header shouldn't be null");
             this.begin = begin;
             this.end = end;
             this.header = header;

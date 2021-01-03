@@ -45,14 +45,14 @@ public class ResumeTestData {
             "Scala: SBT, Play2, Specs2, Anorm, Spray, Akka",
             "Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, StAX, SAX, DOM, XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, BPMN2, LDAP, OAuth1, OAuth2, JWT.",
             "Инструменты: Maven + plugin development, Gradle, настройка Ngnix, администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, iReport, OpenCmis, Bonita, pgBouncer.",
-            "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования",
+            "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектирования, архитектурных шаблонов, UML, функционального программирования",
             "Родной русский, английский \"upper intermediate\""
     };
 
     private static final String[] experiences = {
             "Java Online Projects", "http://javaops.ru/", "2013-10", "2020-12", "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок.",
             "Wrike", "https://www.wrike.com/", "2014-10", "2016-01", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
-            "RIT Center", "", "2012-04", "2014-10", "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python",
+            "RIT Center", "", "2012-04", "2014-10", "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интеграционных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python",
             "Luxoft (Deutsche Bank)", "http://www.luxoft.ru/", "2010-12", "2012-04", "Ведущий программист", "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.",
             "Alcatel", "http://www.alcatel.ru/", "1997-09", "2005-01", "Инженер по аппаратному и программному тестированию", "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."
     };
@@ -89,19 +89,19 @@ public class ResumeTestData {
         sections.put(SectionType.QUALIFICATIONS, new BulletedListSection(getRandom(qualifications), getRandom(qualifications), getRandom(qualifications)));
 
         OrganisationSection experienceSection = new OrganisationSection();
-        List<Integer> usedExpiriences = new ArrayList<>();
+        List<Integer> usedExperiences = new ArrayList<>();
         for (int i = 0; i < experiencesCount; i++) {
             int randomExperience;
             do {
                 randomExperience = random.nextInt(experiences.length / 6) * 6;
-            } while (usedExpiriences.contains(randomExperience));
-            usedExpiriences.add(randomExperience);
+            } while (usedExperiences.contains(randomExperience));
+            usedExperiences.add(randomExperience);
             Organisation.Position position = new Organisation.Position(
                     YearMonth.parse(experiences[randomExperience + 2]),
                     YearMonth.parse(experiences[randomExperience + 3]),
                     experiences[randomExperience + 4],
                     experiences[randomExperience + 5]);
-            Link link = new Link(experiences[randomExperience], experiences[randomExperience + 1]);
+            LinksList.Link link = new LinksList.Link(experiences[randomExperience], experiences[randomExperience + 1]);
             if (i == experiencesCount - 2) {
                 Organisation.Position position2 = new Organisation.Position(
                         YearMonth.parse(experiences[randomExperience + 2]),
@@ -130,7 +130,7 @@ public class ResumeTestData {
                     YearMonth.parse(educations[randomEducation + 3]),
                     educations[randomEducation + 4],
                     "");
-            Link link = new Link(educations[randomEducation], educations[randomEducation + 1]);
+            LinksList.Link link = new LinksList.Link(educations[randomEducation], educations[randomEducation + 1]);
             Organisation organisation = new Organisation(link, position);
             educationSection.add(organisation);
         }

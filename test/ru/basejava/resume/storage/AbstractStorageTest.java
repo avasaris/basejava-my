@@ -16,14 +16,12 @@ import java.util.UUID;
 import static ru.basejava.resume.ResumeTestData.generateRandomResume;
 
 public abstract class AbstractStorageTest {
+    protected static final String STORAGE_DIR = "storage";
     private static final String UUID1 = UUID.randomUUID().toString();
     private static final String UUID2 = UUID.randomUUID().toString();
     private static final String UUID3 = UUID.randomUUID().toString();
     private static final String UUID_NOT_EXIST = UUID.randomUUID().toString();
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
-
-    protected static final String STORAGE_DIR = "storage";
-
     final Resume resume1 = generateRandomResume(UUID1, "Alex");
     final Resume resume2 = generateRandomResume(UUID2, "Zed");
     final Resume resume3 = generateRandomResume(UUID3, "Dan");
@@ -67,7 +65,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume(UUID_NOT_EXIST,"Liza Maria"));
+        storage.update(new Resume(UUID_NOT_EXIST, "Liza Maria"));
     }
 
     @Test

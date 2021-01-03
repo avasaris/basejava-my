@@ -23,7 +23,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     Resume getSearchKey(String uuid) {
-        return mapResumeStorage.getOrDefault(uuid, new Resume(uuid,""));
+        return mapResumeStorage.getOrDefault(uuid, new Resume(uuid, ""));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     void deleteAt(Resume resume) {
-       mapResumeStorage.remove(resume.getUuid());
+        mapResumeStorage.remove(resume.getUuid());
     }
 
     @Override

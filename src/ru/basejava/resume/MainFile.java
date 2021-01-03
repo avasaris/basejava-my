@@ -10,11 +10,11 @@ public class MainFile {
 
     private static void printDir(String path) throws IOException {
         File dir = new File(path);
-        if(dir.isDirectory()){
+        if (dir.isDirectory()) {
             String[] list = dir.list();
-            if(list == null) return;
-            for(String name: list){
-                if(!name.equals(".git") && !name.equals(".idea")) {
+            if (list == null) return;
+            for (String name : list) {
+                if (!name.equals(".git") && !name.equals(".idea")) {
                     printDir(path + "/" + name);
                 }
             }
