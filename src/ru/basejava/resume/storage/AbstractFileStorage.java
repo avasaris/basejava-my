@@ -14,8 +14,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final StreamStorageStrategy streamStorage;
 
     protected AbstractFileStorage(String dir, StreamStorageStrategy streamStorage) {
+        Objects.requireNonNull(dir);
         directory = new File(dir);
-        Objects.requireNonNull(directory);
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " isn't directory path");
         }

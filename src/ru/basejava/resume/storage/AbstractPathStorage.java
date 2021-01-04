@@ -17,8 +17,8 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final StreamStorageStrategy streamStorage;
 
     protected AbstractPathStorage(String dir, StreamStorageStrategy streamStorage) {
+        Objects.requireNonNull(dir);
         directory = Paths.get(dir);
-        Objects.requireNonNull(directory);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " isn't directory or isn't accessible for R/W");
         }
