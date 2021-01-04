@@ -14,17 +14,16 @@ import java.util.stream.Collectors;
 public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    protected AbstractPathStorage(String dir) {
+    private final StreamStorageStrategy streamStorage;
+
+    protected AbstractPathStorage(String dir, StreamStorageStrategy streamStorage) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " isn't directory or isn't accessible for R/W");
         }
+        this.streamStorage = streamStorage;
     }
-
-    protected abstract void doWrite(OutputStream os, Resume resume) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     void insertAt(Path file, Resume resume) {
@@ -43,7 +42,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     void updateAt(Path path, Resume resume) {
         try (OutputStream file = Files.newOutputStream(path)) {
-            doWrite(new BufferedOutputStream(file), resume);
+            streamStorage.doWrite(new BufferedOutputStream(file), resume);
         } catch (IOException e) {
             throw new StorageException("Can't save resume to path.", path.toString(), e);
         }
@@ -52,7 +51,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     Resume getAt(Path path) {
         try (InputStream file = Files.newInputStream(path)) {
-            return doRead(new BufferedInputStream(file));
+            return streamStorage.doRead(new BufferedInputStream(file));
         } catch (IOException e) {
             throw new StorageException("Can't read resume from path.", path.toString(), e);
         }

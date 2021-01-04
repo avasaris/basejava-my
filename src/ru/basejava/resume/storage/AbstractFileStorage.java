@@ -11,7 +11,9 @@ import java.util.Objects;
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
 
-    protected AbstractFileStorage(String dir) {
+    private final StreamStorageStrategy streamStorage;
+
+    protected AbstractFileStorage(String dir, StreamStorageStrategy streamStorage) {
         directory = new File(dir);
         Objects.requireNonNull(directory);
         if (!directory.isDirectory()) {
@@ -20,11 +22,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " isn't accessible for R/W");
         }
+        this.streamStorage = streamStorage;
     }
-
-    protected abstract void doWrite(OutputStream os, Resume resume) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     void insertAt(File file, Resume resume) {
@@ -48,7 +47,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     void updateAt(File file, Resume resume) {
         try {
-            doWrite(new BufferedOutputStream(new FileOutputStream(file)), resume);
+            streamStorage.doWrite(new BufferedOutputStream(new FileOutputStream(file)), resume);
         } catch (IOException e) {
             throw new StorageException("Can't save resume to file.", file.getName(), e);
         }
@@ -57,7 +56,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     Resume getAt(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return streamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Can't read resume from file.", file.getName(), e);
         }
