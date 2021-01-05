@@ -1,5 +1,10 @@
 package ru.basejava.resume.model;
 
+import ru.basejava.resume.util.YearMonthAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -7,11 +12,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organisation implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private final LinksList.Link link;
     private final List<Position> positions = new ArrayList<>();
+    private LinksList.Link link;
+
+    public Organisation() {
+    }
 
     public Organisation(LinksList.Link link, Position... positions) {
         Objects.requireNonNull(link, "Link to organisation shouldn't be null.");
@@ -51,13 +59,19 @@ public class Organisation implements Serializable {
         return result;
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private final YearMonth begin;
-        private final YearMonth end;
-        private final String header;
-        private final String description;
+        @XmlJavaTypeAdapter(YearMonthAdapter.class)
+        private YearMonth begin;
+        @XmlJavaTypeAdapter(YearMonthAdapter.class)
+        private YearMonth end;
+        private String header;
+        private String description;
+
+        public Position() {
+        }
 
         public Position(YearMonth begin, YearMonth end, String header, String description) {
             Objects.requireNonNull(begin, "Position.begin shouldn't be null");

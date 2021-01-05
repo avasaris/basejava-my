@@ -1,14 +1,9 @@
 package ru.basejava.resume.storage;
 
+import ru.basejava.resume.storage.serializer.ObjectStreamSerializer;
+
 public class ObjectStreamPathStorageTest extends AbstractStorageTest {
     public ObjectStreamPathStorageTest() {
-        super(new ObjectStreamPathStorage(STORAGE_DIR));
-    }
-
-    private static class ObjectStreamPathStorage extends AbstractPathStorage {
-        protected ObjectStreamPathStorage(String directory) {
-            super(directory, new ObjectStreamStorage());
-        }
-
+        super(new PathStorage(STORAGE_DIR, new ObjectStreamSerializer()));
     }
 }

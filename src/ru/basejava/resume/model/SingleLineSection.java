@@ -5,7 +5,10 @@ import java.util.Objects;
 public class SingleLineSection extends Section {
     private static final long serialVersionUID = 1L;
 
-    private final String value;
+    private String value;
+
+    public SingleLineSection() {
+    }
 
     public SingleLineSection(String value) {
         Objects.requireNonNull(value, "Objective or personal data shouldn't be null");

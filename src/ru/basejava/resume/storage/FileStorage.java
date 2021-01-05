@@ -2,18 +2,19 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
+import ru.basejava.resume.storage.serializer.SerializerStrategy;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
 
-    private final StreamStorageStrategy streamStorage;
+    private final SerializerStrategy streamStorage;
 
-    protected AbstractFileStorage(String dir, StreamStorageStrategy streamStorage) {
+    protected FileStorage(String dir, SerializerStrategy streamStorage) {
         Objects.requireNonNull(dir);
         directory = new File(dir);
         if (!directory.isDirectory()) {

@@ -10,6 +10,9 @@ public class BulletedListSection extends Section {
 
     private final List<String> value = new ArrayList<>();
 
+    public BulletedListSection() {
+    }
+
     public BulletedListSection(String... items) {
         Objects.requireNonNull(items, "Qualification or achievement shouldn't be null");
         this.value.addAll(Arrays.asList(items));

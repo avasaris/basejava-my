@@ -1,13 +1,19 @@
 package ru.basejava.resume.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrganisationSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private final List<Organisation> organisations = new ArrayList<>();
+
+    public OrganisationSection() {
+    }
 
     public OrganisationSection(Organisation... organisations) {
         Collections.addAll(this.organisations, organisations);

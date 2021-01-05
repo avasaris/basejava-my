@@ -1,11 +1,11 @@
-package ru.basejava.resume.storage;
+package ru.basejava.resume.storage.serializer;
 
 import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage implements StreamStorageStrategy {
+public class ObjectStreamSerializer implements SerializerStrategy {
     @Override
     public void doWrite(OutputStream os, Resume resume) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
