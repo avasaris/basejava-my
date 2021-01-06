@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrganisationSection extends Section {
@@ -51,5 +52,15 @@ public class OrganisationSection extends Section {
     @Override
     public int hashCode() {
         return organisations.hashCode();
+    }
+
+    @Override
+    public int size() {
+        return organisations.size();
+    }
+
+    @Override
+    public Stream getValue() {
+        return organisations.stream();
     }
 }

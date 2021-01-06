@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class BulletedListSection extends Section {
     private static final long serialVersionUID = 1L;
@@ -36,5 +37,15 @@ public class BulletedListSection extends Section {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public int size() {
+        return value.size();
+    }
+
+    @Override
+    public Stream getValue() {
+        return value.stream();
     }
 }

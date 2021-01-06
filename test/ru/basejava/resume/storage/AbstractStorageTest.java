@@ -22,7 +22,7 @@ public abstract class AbstractStorageTest {
     private static final String UUID3 = UUID.randomUUID().toString();
     private static final String UUID_NOT_EXIST = UUID.randomUUID().toString();
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
-    final Resume resume1 = generateRandomResume(UUID1, "Alex");
+    final Resume resume1 = new Resume(UUID1, "Alex");
     final Resume resume2 = generateRandomResume(UUID2, "Zed");
     final Resume resume3 = generateRandomResume(UUID3, "Dan");
     final Storage storage;

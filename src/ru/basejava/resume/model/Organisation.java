@@ -33,6 +33,10 @@ public class Organisation implements Serializable {
         return positions;
     }
 
+    public LinksList.Link getLink() {
+        return link;
+    }
+
     @Override
     public String toString() {
         return "\nOrganisation{" +

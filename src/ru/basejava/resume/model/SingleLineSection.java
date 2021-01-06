@@ -1,6 +1,8 @@
 package ru.basejava.resume.model;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class SingleLineSection extends Section {
     private static final long serialVersionUID = 1L;
@@ -33,5 +35,15 @@ public class SingleLineSection extends Section {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
+    @Override
+    public Stream getValue() {
+        return Arrays.asList(value).stream();
     }
 }

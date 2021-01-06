@@ -1,9 +1,6 @@
 package ru.basejava.resume.storage.serializer;
 
-import ru.basejava.resume.model.ContactType;
-import ru.basejava.resume.model.Resume;
-import ru.basejava.resume.model.Section;
-import ru.basejava.resume.model.SectionType;
+import ru.basejava.resume.model.*;
 
 import java.io.*;
 import java.util.EnumMap;
@@ -22,7 +19,33 @@ public class DataStreamSerializer implements SerializerStrategy {
                 dos.writeUTF(entry.getValue());
             }
             // TODO implements sections
+            Map<SectionType, Section> sections = resume.getSections();
+            dos.writeInt(sections.size());
+            for(Map.Entry<SectionType, Section> entry : sections.entrySet()){
+                System.out.println(entry.getKey().name());
+                System.out.println(entry.getValue().size());
+                System.out.println(entry.getValue().getClass());
+                switch(entry.getKey()){
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        System.out.println(entry.getValue());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        entry.getValue().getValue().forEach(System.out::println);
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        entry.getValue().getValue().map(x -> ((Organisation) x).getLink()).forEach(System.out::println);
+                        break;
+                }
 
+
+
+
+
+                System.out.println("-----------------------");
+            }
         }
     }
 
