@@ -20,7 +20,7 @@ public class OrganisationSection extends Section<Organisation> {
         Collections.addAll(this.organisations, organisations);
     }
 
-    public void add(Organisation organisation) {
+    public void addItem(Organisation organisation) {
         organisations.add(organisation);
     }
 

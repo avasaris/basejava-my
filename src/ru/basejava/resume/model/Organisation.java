@@ -37,6 +37,14 @@ public class Organisation implements Serializable {
         return link;
     }
 
+    public void setLink(LinksList.Link link) {
+        this.link = link;
+    }
+
+    public void addPosition(Position position) {
+        positions.add(position);
+    }
+
     @Override
     public String toString() {
         return "\nOrganisation{" +
@@ -84,6 +92,38 @@ public class Organisation implements Serializable {
             this.begin = begin;
             this.end = end;
             this.header = header;
+            this.description = description;
+        }
+
+        public YearMonth getBegin() {
+            return begin;
+        }
+
+        public void setBegin(YearMonth begin) {
+            this.begin = begin;
+        }
+
+        public YearMonth getEnd() {
+            return end;
+        }
+
+        public void setEnd(YearMonth end) {
+            this.end = end;
+        }
+
+        public String getHeader() {
+            return header;
+        }
+
+        public void setHeader(String header) {
+            this.header = header;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
             this.description = description;
         }
 

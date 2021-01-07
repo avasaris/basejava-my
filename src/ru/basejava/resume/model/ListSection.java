@@ -19,6 +19,11 @@ public class ListSection extends Section<String> {
     }
 
     @Override
+    public void addItem(String item) {
+        items.add(item);
+    }
+
+    @Override
     public String toString() {
         return "* " + String.join("\n* ", items);
     }

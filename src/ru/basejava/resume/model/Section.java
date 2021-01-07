@@ -11,4 +11,6 @@ abstract public class Section<T> implements Serializable {
     public abstract int size();
 
     public abstract Stream<T> getItemsStream();
+
+    public abstract void addItem(T readUTF);
 }

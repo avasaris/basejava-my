@@ -17,6 +17,11 @@ public class TextSection extends Section<String> {
     }
 
     @Override
+    public void addItem(String item) {
+        content = item;
+    }
+
+    @Override
     public String toString() {
         return content;
     }
