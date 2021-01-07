@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Organisation implements Serializable {
     private static final long serialVersionUID = 1L;
     private final List<Position> positions = new ArrayList<>();
@@ -24,8 +23,7 @@ public class Organisation implements Serializable {
     public Organisation(LinksList.Link link, Position... positions) {
         Objects.requireNonNull(link, "Link to organisation shouldn't be null.");
         Objects.requireNonNull(positions, "Position or education shouldn't be null.");
-        LinksList ll = LinksList.getInstance();
-        this.link = ll.get(link);
+        setLink(link);
         Collections.addAll(this.positions, positions);
     }
 
@@ -33,12 +31,18 @@ public class Organisation implements Serializable {
         return positions;
     }
 
+    public void setPositions(List<Position> positions) {
+        this.positions.clear();
+        Collections.addAll(this.positions, positions.toArray(new Position[0]));
+    }
+
     public LinksList.Link getLink() {
         return link;
     }
 
     public void setLink(LinksList.Link link) {
-        this.link = link;
+        LinksList ll = LinksList.getInstance();
+        this.link = ll.get(link);
     }
 
     public void addPosition(Position position) {

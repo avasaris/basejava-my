@@ -45,6 +45,7 @@ public class PathStorage extends AbstractStorage<Path> {
     void updateAt(Path file, Resume resume) {
         try (OutputStream fileStream = Files.newOutputStream(file)) {
             streamStorage.doWrite(new BufferedOutputStream(fileStream), resume);
+            fileStream.flush();
         } catch (IOException e) {
             throw new StorageException("Can't save resume to path.", getFileName(file), e);
         }

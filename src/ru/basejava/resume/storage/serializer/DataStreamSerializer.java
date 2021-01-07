@@ -62,18 +62,18 @@ public class DataStreamSerializer implements StreamSerializer {
             String fullName = dis.readUTF();
 
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
+            int contactsCount = dis.readInt();
             Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < contactsCount; i++) {
                 ContactType contactType = ContactType.valueOf(dis.readUTF());
                 String content = dis.readUTF();
                 contacts.put(contactType, content);
             }
             resume.setContacts(contacts);
 
-            // TODO implements sections
             Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-            for (int i = 0; i < dis.readInt(); i++) {
+            int sectionsCount = dis.readInt();
+            for (int i = 0; i < sectionsCount; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
 
                 switch (sectionType) {
@@ -81,10 +81,12 @@ public class DataStreamSerializer implements StreamSerializer {
                     case OBJECTIVE:
                         dis.readInt();
                         sections.put(sectionType, new TextSection(dis.readUTF()));
+                        break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         Section<String> listSection = new ListSection();
-                        for (int j = 0; j < dis.readInt(); j++) {
+                        int listSectionCount = dis.readInt();
+                        for (int j = 0; j < listSectionCount; j++) {
                             listSection.addItem(dis.readUTF());
                         }
                         sections.put(sectionType, listSection);
@@ -92,11 +94,13 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EDUCATION:
                     case EXPERIENCE:
                         Section<Organisation> orgSection = new OrganisationSection();
-                        for (int j = 0; j < dis.readInt(); j++) {
+                        int orgSectionCount = dis.readInt();
+                        for (int j = 0; j < orgSectionCount; j++) {
                             Organisation organisation = new Organisation();
                             LinksList.Link link = new LinksList.Link(dis.readUTF(), dis.readUTF());
                             organisation.setLink(link);
-                            for (int p = 0; p < dis.readInt(); p++) {
+                            int positionCount = dis.readInt();
+                            for (int p = 0; p < positionCount; p++) {
                                 Organisation.Position position = new Organisation.Position();
                                 position.setBegin(YearMonth.parse(dis.readUTF()));
                                 position.setEnd(YearMonth.parse(dis.readUTF()));
