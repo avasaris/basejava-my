@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class DataStreamSerializer implements SerializerStrategy {
+public class DataStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(OutputStream os, Resume resume) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
@@ -32,11 +32,11 @@ public class DataStreamSerializer implements SerializerStrategy {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        entry.getValue().getValue().forEach(System.out::println);
+                        entry.getValue().getItemsStream().forEach(System.out::println);
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        entry.getValue().getValue().map(x -> ((Organisation) x).getLink()).forEach(System.out::println);
+                        entry.getValue().getItemsStream().map(x -> ((Organisation) x).getLink()).forEach(System.out::println);
                         break;
                 }
 

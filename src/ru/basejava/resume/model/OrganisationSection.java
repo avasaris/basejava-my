@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class OrganisationSection extends Section {
+public class OrganisationSection extends Section<Organisation> {
     private static final long serialVersionUID = 1L;
 
     private final List<Organisation> organisations = new ArrayList<>();
@@ -60,7 +60,7 @@ public class OrganisationSection extends Section {
     }
 
     @Override
-    public Stream getValue() {
+    public Stream<Organisation> getItemsStream() {
         return organisations.stream();
     }
 }

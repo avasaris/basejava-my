@@ -5,7 +5,7 @@ import ru.basejava.resume.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamSerializer implements SerializerStrategy {
+public class ObjectStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(OutputStream os, Resume resume) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {

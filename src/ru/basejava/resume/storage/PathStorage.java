@@ -2,7 +2,7 @@ package ru.basejava.resume.storage;
 
 import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.Resume;
-import ru.basejava.resume.storage.serializer.SerializerStrategy;
+import ru.basejava.resume.storage.serializer.StreamSerializer;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    private final SerializerStrategy streamStorage;
+    private final StreamSerializer streamStorage;
 
-    protected PathStorage(String dir, SerializerStrategy streamStorage) {
+    protected PathStorage(String dir, StreamSerializer streamStorage) {
         Objects.requireNonNull(dir);
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {

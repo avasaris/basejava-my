@@ -6,13 +6,13 @@ import ru.basejava.resume.util.XmlParser;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class XmlStreamSerializer implements SerializerStrategy {
+public class XmlStreamSerializer implements StreamSerializer {
     private final XmlParser xmlParser;
 
     public XmlStreamSerializer() {
         xmlParser = new XmlParser(Resume.class, Organisation.class, Organisation.Position.class,
-                LinksList.class, LinksList.Link.class, OrganisationSection.class, SingleLineSection.class,
-                BulletedListSection.class);
+                LinksList.class, LinksList.Link.class, OrganisationSection.class, TextSection.class,
+                ListSection.class);
     }
 
     @Override

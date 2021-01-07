@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.stream.Stream;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-abstract public class Section implements Serializable {
+abstract public class Section<T> implements Serializable {
 
     public abstract int size();
 
-    public abstract Stream getValue();
+    public abstract Stream<T> getItemsStream();
 }

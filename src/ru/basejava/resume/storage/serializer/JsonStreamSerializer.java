@@ -6,7 +6,7 @@ import ru.basejava.resume.util.JsonParser;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class JsonStreamSerializer implements SerializerStrategy {
+public class JsonStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(OutputStream os, Resume resume) throws IOException {
         try (Writer writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {

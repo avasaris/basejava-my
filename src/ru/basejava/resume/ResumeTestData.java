@@ -82,11 +82,11 @@ public class ResumeTestData {
 
         Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
-        sections.put(SectionType.PERSONAL, new SingleLineSection(getRandom(positions)));
-        sections.put(SectionType.OBJECTIVE, new SingleLineSection(getRandom(objectives)));
+        sections.put(SectionType.PERSONAL, new TextSection(getRandom(positions)));
+        sections.put(SectionType.OBJECTIVE, new TextSection(getRandom(objectives)));
 
-        sections.put(SectionType.ACHIEVEMENT, new BulletedListSection(getRandom(achievements), getRandom(achievements)));
-        sections.put(SectionType.QUALIFICATIONS, new BulletedListSection(getRandom(qualifications), getRandom(qualifications), getRandom(qualifications)));
+        sections.put(SectionType.ACHIEVEMENT, new ListSection(getRandom(achievements), getRandom(achievements)));
+        sections.put(SectionType.QUALIFICATIONS, new ListSection(getRandom(qualifications), getRandom(qualifications), getRandom(qualifications)));
 
         OrganisationSection experienceSection = new OrganisationSection();
         List<Integer> usedExperiences = new ArrayList<>();
