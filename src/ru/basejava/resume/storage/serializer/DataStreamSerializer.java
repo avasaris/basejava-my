@@ -1,5 +1,6 @@
 package ru.basejava.resume.storage.serializer;
 
+import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.*;
 
 import java.io.*;
@@ -10,140 +11,138 @@ import java.util.Map;
 
 public class DataStreamSerializer implements StreamSerializer {
     @Override
-    public void doWrite(OutputStream os, Resume resume) throws IOException {
+    public void doWrite(OutputStream os, Resume resume) {
         try (DataOutputStream dos = new DataOutputStream(os)) {
-            dos.writeUTF(resume.getUuid());
-            dos.writeUTF(resume.getFullName());
+            DsStringsSave(dos, resume.getUuid(), resume.getFullName());
+            DsContactsSave(dos, resume.getContacts());
+            DsSectionsSave(dos, resume.getSections());
+        } catch (IOException e) {
+            throw new StorageException("DataStream write error", "", e);
+        }
+    }
 
-            Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
+    private void DsSectionsSave(DataOutputStream dos, Map<SectionType, Section> sections) throws IOException {
+        dos.writeInt(sections.size());
+        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            dos.writeUTF(entry.getKey().name());
+            dos.writeInt(entry.getValue().size());
+            switch (entry.getKey()) {
+                case PERSONAL:
+                case OBJECTIVE:
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    entry.getValue().getItemsStream().forEach(x -> DsStringsSave(dos, (String) x));
+                    break;
+                case EDUCATION:
+                case EXPERIENCE:
+                    entry.getValue().getItemsStream().forEach(x -> DsOrganisationSave(dos, (Organisation) x));
+                    break;
             }
+        }
+    }
 
-            Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            System.out.println(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                System.out.println(entry.getKey().name());
-                dos.writeInt(entry.getValue().size());
-                System.out.println(entry.getValue().size());
-                switch (entry.getKey()) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        entry.getValue().getItemsStream().forEach(x -> {
-                            try {
-                                dos.writeUTF((String) x);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        entry.getValue().getItemsStream().forEach(System.out::println);
-                        break;
-                    case EDUCATION:
-                    case EXPERIENCE:
-                        entry.getValue().getItemsStream().forEach(x -> OrganisationDataSerialization(dos, (Organisation) x));
-                        break;
-                }
+    private void DsContactsSave(DataOutputStream dos, Map<ContactType, String> contacts) throws IOException {
+        dos.writeInt(contacts.size());
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            DsStringsSave(dos, entry.getKey().name(), entry.getValue());
+        }
+    }
 
-                System.out.println("-----------------------");
+    private void DsOrganisationSave(DataOutputStream dos, Organisation org) {
+        try {
+            DsStringsSave(dos, org.getLink().getName(), org.getLink().getUrl());
+
+            List<Organisation.Position> positions = org.getPositions();
+            dos.writeInt(positions.size());
+
+            for (Organisation.Position position : positions) {
+                DsStringsSave(dos,
+                        position.getBegin().toString(),
+                        position.getEnd().toString(),
+                        position.getHeader(),
+                        position.getDescription());
             }
+        } catch (IOException e) {
+            throw new StorageException("DataStream write error", "", e);
+        }
+    }
+
+    private void DsStringsSave(DataOutputStream dos, String... strings) {
+        try {
+            for (String str : strings) {
+                dos.writeUTF(str);
+            }
+        } catch (IOException e) {
+            throw new StorageException("DataStream write error", "", e);
         }
     }
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
-            String uuid = dis.readUTF();
-            String fullName = dis.readUTF();
-
-            Resume resume = new Resume(uuid, fullName);
-            int contactsCount = dis.readInt();
-            Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-            for (int i = 0; i < contactsCount; i++) {
-                ContactType contactType = ContactType.valueOf(dis.readUTF());
-                String content = dis.readUTF();
-                contacts.put(contactType, content);
-            }
-            resume.setContacts(contacts);
-
-            Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-            int sectionsCount = dis.readInt();
-            for (int i = 0; i < sectionsCount; i++) {
-                SectionType sectionType = SectionType.valueOf(dis.readUTF());
-
-                switch (sectionType) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        dis.readInt();
-                        sections.put(sectionType, new TextSection(dis.readUTF()));
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        Section<String> listSection = new ListSection();
-                        int listSectionCount = dis.readInt();
-                        for (int j = 0; j < listSectionCount; j++) {
-                            listSection.addItem(dis.readUTF());
-                        }
-                        sections.put(sectionType, listSection);
-                        break;
-                    case EDUCATION:
-                    case EXPERIENCE:
-                        Section<Organisation> orgSection = new OrganisationSection();
-                        int orgSectionCount = dis.readInt();
-                        for (int j = 0; j < orgSectionCount; j++) {
-                            Organisation organisation = new Organisation();
-                            LinksList.Link link = new LinksList.Link(dis.readUTF(), dis.readUTF());
-                            organisation.setLink(link);
-                            int positionCount = dis.readInt();
-                            for (int p = 0; p < positionCount; p++) {
-                                Organisation.Position position = new Organisation.Position();
-                                position.setBegin(YearMonth.parse(dis.readUTF()));
-                                position.setEnd(YearMonth.parse(dis.readUTF()));
-                                position.setHeader(dis.readUTF());
-                                position.setDescription(dis.readUTF());
-                                organisation.addPosition(position);
-                            }
-                            orgSection.addItem(organisation);
-                        }
-                        sections.put(sectionType, orgSection);
-                        break;
-                }
-            }
-            resume.setSections(sections);
-
+            Resume resume = new Resume(dis.readUTF(), dis.readUTF());
+            resume.setContacts(DsContactsRestore(dis));
+            resume.setSections(DsSectionsRestore(dis));
             return resume;
         }
     }
 
-    private void OrganisationDataSerialization(DataOutputStream dos, Organisation org) {
-        try {
-            dos.writeUTF(org.getLink().getName());
-            System.out.println(org.getLink().getName());
-            dos.writeUTF(org.getLink().getUrl());
-            System.out.println(org.getLink().getUrl());
+    private Map<SectionType, Section> DsSectionsRestore(DataInputStream dis) throws IOException {
+        Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+        int sectionsCount = dis.readInt();
+        for (int i = 0; i < sectionsCount; i++) {
+            SectionType sectionType = SectionType.valueOf(dis.readUTF());
 
-            List<Organisation.Position> positions = org.getPositions();
-            dos.writeInt(positions.size());
-            System.out.println(positions.size());
-
-            for (Organisation.Position position : positions) {
-                dos.writeUTF(position.getBegin().toString());
-                System.out.println(position.getBegin());
-                dos.writeUTF(position.getEnd().toString());
-                System.out.println(position.getEnd());
-                dos.writeUTF(position.getHeader());
-                System.out.println(position.getHeader());
-                dos.writeUTF(position.getDescription());
-                System.out.println(position.getDescription());
+            switch (sectionType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    sections.put(sectionType, DsStringsSectionRestore(dis, new TextSection()));
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    sections.put(sectionType, DsStringsSectionRestore(dis, new ListSection()));
+                    break;
+                case EDUCATION:
+                case EXPERIENCE:
+                    Section<Organisation> orgSection = new OrganisationSection();
+                    int orgSectionCount = dis.readInt();
+                    for (int j = 0; j < orgSectionCount; j++) {
+                        Organisation organisation = new Organisation();
+                        organisation.setLink(new LinksList.Link(dis.readUTF(), dis.readUTF()));
+                        int positionCount = dis.readInt();
+                        for (int p = 0; p < positionCount; p++) {
+                            Organisation.Position position = new Organisation.Position();
+                            position.setBegin(YearMonth.parse(dis.readUTF()));
+                            position.setEnd(YearMonth.parse(dis.readUTF()));
+                            position.setHeader(dis.readUTF());
+                            position.setDescription(dis.readUTF());
+                            organisation.addPosition(position);
+                        }
+                        orgSection.addItem(organisation);
+                    }
+                    sections.put(sectionType, orgSection);
+                    break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return sections;
     }
+
+    private Section<String> DsStringsSectionRestore(DataInputStream dis, Section<String> section) throws IOException {
+        int count = dis.readInt();
+        for (int j = 0; j < count; j++) {
+            section.addItem(dis.readUTF());
+        }
+        return section;
+    }
+
+    private Map<ContactType, String> DsContactsRestore(DataInputStream dis) throws IOException {
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+        int contactsCount = dis.readInt();
+        for (int i = 0; i < contactsCount; i++) {
+            contacts.put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
+        }
+        return contacts;
+    }
+
 
 }
