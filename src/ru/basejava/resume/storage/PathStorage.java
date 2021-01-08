@@ -67,7 +67,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     Path getSearchKey(String uuid) {
-        return Paths.get(directory.toString(), uuid);
+        return directory.resolve(uuid);
     }
 
     @Override

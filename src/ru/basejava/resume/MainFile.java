@@ -20,7 +20,7 @@ public class MainFile {
     private static void walkInsideDir(String dir, int level) {
         Objects.requireNonNull(dir);
         File name = new File(dir);
-        printName(level, name);
+        printName(name, level);
         if (name.isDirectory()) {
             String[] dirList = name.list();
             if (dirList == null) {
@@ -34,13 +34,13 @@ public class MainFile {
         }
     }
 
-    private static void printName(int level, File dir) {
+    private static void printName(File dir, int level) {
         String name = getName(dir);
-        StringBuffer levelName = getLevelName(level, name);
+        StringBuffer levelName = getIndentedName(name, level);
         System.out.println(levelName);
     }
 
-    private static StringBuffer getLevelName(int level, String name) {
+    private static StringBuffer getIndentedName(String name, int level) {
         StringBuffer sb = new StringBuffer(name);
         for (int i = 0; i < level - 1; i++) {
             sb.insert(0, '\t');

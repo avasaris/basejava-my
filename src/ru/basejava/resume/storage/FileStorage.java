@@ -77,15 +77,12 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     List<Resume> getStorageAsList() {
-        final File[] files = directory.listFiles();
         List<Resume> fileList = new LinkedList<>();
+        final File[] files = directory.listFiles();
         if (files == null) {
             return fileList;
         }
         for (File file : files) {
-            if (!file.isFile()) {
-                continue;
-            }
             fileList.add(getAt(file));
         }
         return fileList;
@@ -93,33 +90,15 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        final File[] files = directory.listFiles();
-        if (files == null) {
-            return;
-        }
-        for (File file : files) {
-            if (!file.isFile()) {
-                continue;
-            }
-            if (!file.delete()) {
-                throw new StorageException("Can't clear directory.", directory.getName());
-            }
+        for (Resume resume : getStorageAsList()) {
+            deleteAt(getSearchKey(resume.getUuid()));
         }
     }
 
     @Override
     public int size() {
-        final File[] files = directory.listFiles();
-        int counter = 0;
-        if (files == null) {
-            return counter;
-        }
-        for (File file : files) {
-            if (!file.isFile()) {
-                continue;
-            }
-            counter++;
-        }
-        return counter;
+        return getStorageAsList().size();
     }
+
+
 }
