@@ -80,14 +80,24 @@ public class Resume implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Resume resume = (Resume) o;
 
-        if (!uuid.equals(resume.uuid)) return false;
-        if (!sections.equals(resume.sections)) return false;
-        if (!contacts.equals(resume.contacts)) return false;
+        if (!uuid.equals(resume.uuid)) {
+            return false;
+        }
+        if (!sections.equals(resume.sections)) {
+            return false;
+        }
+        if (!contacts.equals(resume.contacts)) {
+            return false;
+        }
         return fullName.equals(resume.fullName);
     }
 

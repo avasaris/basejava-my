@@ -16,15 +16,15 @@ import java.util.stream.Stream;
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    private final StreamSerializer streamStorage;
+    private final StreamSerializer streamSerializer;
 
-    protected PathStorage(String dir, StreamSerializer streamStorage) {
+    protected PathStorage(String dir, StreamSerializer streamSerializer) {
         Objects.requireNonNull(dir);
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " isn't directory or isn't accessible for R/W");
         }
-        this.streamStorage = streamStorage;
+        this.streamSerializer = streamSerializer;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     void updateAt(Path file, Resume resume) {
         try (OutputStream fileStream = Files.newOutputStream(file)) {
-            streamStorage.doWrite(new BufferedOutputStream(fileStream), resume);
+            streamSerializer.doWrite(new BufferedOutputStream(fileStream), resume);
             fileStream.flush();
         } catch (IOException e) {
             throw new StorageException("Can't save resume to path.", getFileName(file), e);
@@ -54,7 +54,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     Resume getAt(Path file) {
         try (InputStream fileStream = Files.newInputStream(file)) {
-            return streamStorage.doRead(new BufferedInputStream(fileStream));
+            return streamSerializer.doRead(new BufferedInputStream(fileStream));
         } catch (IOException e) {
             throw new StorageException("Can't read resume from path.", getFileName(file), e);
         }

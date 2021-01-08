@@ -59,12 +59,18 @@ public class Organisation implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Organisation that = (Organisation) o;
 
-        if (!link.equals(that.link)) return false;
+        if (!link.equals(that.link)) {
+            return false;
+        }
         return positions.equals(that.positions);
     }
 
@@ -143,14 +149,24 @@ public class Organisation implements Serializable {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             Position that = (Position) o;
 
-            if (!begin.equals(that.begin)) return false;
-            if (!end.equals(that.end)) return false;
-            if (!header.equals(that.header)) return false;
+            if (!begin.equals(that.begin)) {
+                return false;
+            }
+            if (!end.equals(that.end)) {
+                return false;
+            }
+            if (!header.equals(that.header)) {
+                return false;
+            }
             return description.equals(that.description);
         }
 

@@ -23,7 +23,9 @@ public class MainFile {
         printName(level, name);
         if (name.isDirectory()) {
             String[] dirList = name.list();
-            if (dirList == null) return;
+            if (dirList == null) {
+                return;
+            }
             for (String item : dirList) {
                 if (!EXCLUDE_DIRS.contains(item)) {
                     walkInsideDir(dir + "/" + item, level + 1);
@@ -40,13 +42,17 @@ public class MainFile {
 
     private static StringBuffer getLevelName(int level, String name) {
         StringBuffer sb = new StringBuffer(name);
-        for (int i = 0; i < level - 1; i++) sb.insert(0, '\t');
+        for (int i = 0; i < level - 1; i++) {
+            sb.insert(0, '\t');
+        }
         return sb;
     }
 
     private static String getName(File dir) {
         String name = dir.getName();
-        if (dir.isDirectory()) name += "/";
+        if (dir.isDirectory()) {
+            name += "/";
+        }
         return name;
     }
 }
