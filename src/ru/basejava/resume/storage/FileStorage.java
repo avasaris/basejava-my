@@ -78,7 +78,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     List<Resume> getStorageAsList() {
         List<Resume> fileList = new LinkedList<>();
-        final File[] files = directory.listFiles();
+        File[] files = directory.listFiles();
         if (files == null) {
             return fileList;
         }

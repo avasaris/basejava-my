@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     static final int CAPACITY = 10_000;
     final Resume[] storage = new Resume[CAPACITY];
-    int size = 0;
+    int size;
 
     @Override
     public void clear() {

@@ -3,9 +3,8 @@ package ru.basejava.resume.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-public class ListSection extends Section<String> {
+public class ListSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private final List<String> items = new ArrayList<>();
@@ -14,13 +13,7 @@ public class ListSection extends Section<String> {
     }
 
     public ListSection(String... items) {
-//        Objects.requireNonNull(items, "Items shouldn't be null");
         this.items.addAll(Arrays.asList(items));
-    }
-
-    @Override
-    public void addItem(String item) {
-        items.add(item);
     }
 
     @Override
@@ -45,15 +38,5 @@ public class ListSection extends Section<String> {
     @Override
     public int hashCode() {
         return items.hashCode();
-    }
-
-    @Override
-    public int size() {
-        return items.size();
-    }
-
-    @Override
-    public Stream<String> getItemsStream() {
-        return items.stream();
     }
 }

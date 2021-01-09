@@ -1,9 +1,8 @@
 package ru.basejava.resume.model;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
-public class TextSection extends Section<String> {
+public class TextSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private String content;
@@ -14,11 +13,6 @@ public class TextSection extends Section<String> {
     public TextSection(String content) {
         Objects.requireNonNull(content, "Content data shouldn't be null");
         this.content = content;
-    }
-
-    @Override
-    public void addItem(String item) {
-        content = item;
     }
 
     @Override
@@ -43,15 +37,5 @@ public class TextSection extends Section<String> {
     @Override
     public int hashCode() {
         return content.hashCode();
-    }
-
-    @Override
-    public int size() {
-        return 1;
-    }
-
-    @Override
-    public Stream<String> getItemsStream() {
-        return Stream.of(content);
     }
 }
