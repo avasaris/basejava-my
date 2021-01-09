@@ -19,6 +19,11 @@ public class OrganisationSection extends Section {
         Collections.addAll(this.organisations, organisations);
     }
 
+    @Override
+    public void addItem(String item) {
+
+    }
+
     public void addItem(Organisation organisation) {
         organisations.add(organisation);
     }

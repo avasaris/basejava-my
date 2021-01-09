@@ -16,6 +16,15 @@ public class TextSection extends Section {
     }
 
     @Override
+    public void addItem(String item) {
+        content = item;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    @Override
     public String toString() {
         return content;
     }

@@ -17,6 +17,15 @@ public class ListSection extends Section {
     }
 
     @Override
+    public void addItem(String item) {
+        items.add(item);
+    }
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    @Override
     public String toString() {
         return "* " + String.join("\n* ", items);
     }
