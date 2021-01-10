@@ -109,10 +109,10 @@ public class ResumeTestData {
                         experiences[randomExperience + 4],
                         experiences[randomExperience + 5]);
                 Organisation organisation = new Organisation(link, position, position2);
-                experienceSection.addItem(organisation);
+                experienceSection.addItemOrg(organisation);
             } else {
                 Organisation organisation = new Organisation(link, position);
-                experienceSection.addItem(organisation);
+                experienceSection.addItemOrg(organisation);
             }
         }
         sections.put(SectionType.EXPERIENCE, experienceSection);
@@ -132,7 +132,7 @@ public class ResumeTestData {
                     "");
             LinksList.Link link = new LinksList.Link(educations[randomEducation], educations[randomEducation + 1]);
             Organisation organisation = new Organisation(link, position);
-            educationSection.addItem(organisation);
+            educationSection.addItemOrg(organisation);
         }
         sections.put(SectionType.EDUCATION, educationSection);
 

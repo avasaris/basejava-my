@@ -21,10 +21,9 @@ public class OrganisationSection extends Section {
 
     @Override
     public void addItem(String item) {
-
     }
 
-    public void addItem(Organisation organisation) {
+    public void addItemOrg(Organisation organisation) {
         organisations.add(organisation);
     }
 

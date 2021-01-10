@@ -4,55 +4,29 @@ import ru.basejava.resume.exception.StorageException;
 import ru.basejava.resume.model.*;
 
 import java.io.*;
+import java.time.YearMonth;
 import java.util.*;
 
-interface WriteElemWithException<T> {
-    void write(T elem);
-}
-
-class WriteStringWithException implements WriteElemWithException<String> {
-    private final DataOutputStream dos;
-
-    public WriteStringWithException(DataOutputStream dos) {
-        this.dos = dos;
-    }
-
-    @Override
-    public void write(String element) {
-        try {
-            dos.writeUTF(element);
-        } catch (IOException e) {
-            throw new StorageException("DataStream write error", "", e);
-        }
-    }
-}
-
-class WriteIntWithException implements WriteElemWithException<Integer> {
-    private final DataOutputStream dos;
-
-    public WriteIntWithException(DataOutputStream dos) {
-        this.dos = dos;
-    }
-
-    @Override
-    public void write(Integer element) {
-        try {
-            dos.writeInt(element);
-        } catch (IOException e) {
-            throw new StorageException("DataStream write error", "", e);
-        }
-    }
+interface WriteElemWithException<T, S> {
+    void accept(T element, S dos) throws IOException;
 }
 
 public class DataStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(OutputStream os, Resume resume) {
         try (DataOutputStream dos = new DataOutputStream(os)) {
-            DsStringsSave(dos, resume.getUuid(), resume.getFullName());
+            writeWithException(dos, (str, s) -> s.writeUTF(str), Arrays.asList(resume.getUuid(), resume.getFullName()));
             DsContactsSave(dos, resume.getContacts());
             DsSectionsSave(dos, resume.getSections());
         } catch (IOException e) {
             throw new StorageException("DataStream write error", "", e);
+        }
+    }
+
+    private void writeWithException(DataOutputStream dos, WriteElemWithException<String, DataOutputStream> wse, List<String> strings) throws IOException {
+        dos.writeInt(strings.size());
+        for (String string : strings) {
+            wse.accept(string, dos);
         }
     }
 
@@ -63,64 +37,49 @@ public class DataStreamSerializer implements StreamSerializer {
             switch (entry.getKey()) {
                 case PERSONAL:
                 case OBJECTIVE:
-                    writeWithException(new WriteIntWithException(dos), new WriteStringWithException(dos), Collections.singletonList(((TextSection) entry.getValue()).getContent()));
+                    writeWithException(dos, (str, s) -> s.writeUTF(str), Collections.singletonList(((TextSection) entry.getValue()).getContent()));
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    writeWithException(new WriteIntWithException(dos), new WriteStringWithException(dos), ((ListSection) entry.getValue()).getItems());
+                    writeWithException(dos, (str, s) -> s.writeUTF(str), ((ListSection) entry.getValue()).getItems());
                     break;
                 case EDUCATION:
                 case EXPERIENCE:
-//                    entry.getValue().getItemsStream().forEach(x -> DsOrganisationSave(dos, (Organisation) x));
+                    List<Organisation> organisations = ((OrganisationSection) entry.getValue()).getOrganisations();
+                    dos.writeInt(organisations.size());
+                    for (Organisation organisation : organisations) {
+                        DsOrganisationSave(dos, organisation);
+                    }
                     break;
             }
         }
-    }
-
-    private void writeWithException(WriteIntWithException writeIntWithException, WriteStringWithException writeStringWithException, List<String> strings) {
-        writeIntWithException.write(strings.size());
-        strings.forEach(writeStringWithException::write);
     }
 
     private void DsContactsSave(DataOutputStream dos, Map<ContactType, String> contacts) throws IOException {
         dos.writeInt(contacts.size());
         for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            DsStringsSave(dos, entry.getKey().name(), entry.getValue());
+            writeWithException(dos, (str, s) -> s.writeUTF(str), Arrays.asList(entry.getKey().name(), entry.getValue()));
         }
     }
 
-    private void DsOrganisationSave(DataOutputStream dos, Organisation org) {
-        try {
-            DsStringsSave(dos, org.getLink().getName(), org.getLink().getUrl());
+    private void DsOrganisationSave(DataOutputStream dos, Organisation org) throws IOException {
+        writeWithException(dos, (str, s) -> s.writeUTF(str), Arrays.asList(org.getLink().getName(), org.getLink().getUrl()));
 
-            List<Organisation.Position> positions = org.getPositions();
-            dos.writeInt(positions.size());
+        List<Organisation.Position> positions = org.getPositions();
+        dos.writeInt(positions.size());
 
-            for (Organisation.Position position : positions) {
-                DsStringsSave(dos,
-                        position.getBegin().toString(),
-                        position.getEnd().toString(),
-                        position.getHeader(),
-                        position.getDescription());
-            }
-        } catch (IOException e) {
-            throw new StorageException("DataStream write error", "", e);
-        }
-    }
-
-    private void DsStringsSave(DataOutputStream dos, String... strings) {
-        try {
-            for (String str : strings) {
-                dos.writeUTF(str);
-            }
-        } catch (IOException e) {
-            throw new StorageException("DataStream write error", "", e);
+        for (Organisation.Position position : positions) {
+            writeWithException(dos, (str, s) -> s.writeUTF(str), Arrays.asList(position.getBegin().toString(),
+                    position.getEnd().toString(),
+                    position.getHeader(),
+                    position.getDescription()));
         }
     }
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
+            dis.readInt();
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
             resume.setContacts(DsContactsRestore(dis));
             resume.setSections(DsSectionsRestore(dis));
@@ -133,7 +92,6 @@ public class DataStreamSerializer implements StreamSerializer {
         int sectionsCount = dis.readInt();
         for (int i = 0; i < sectionsCount; i++) {
             SectionType sectionType = SectionType.valueOf(dis.readUTF());
-
             switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE:
@@ -145,23 +103,25 @@ public class DataStreamSerializer implements StreamSerializer {
                     break;
                 case EDUCATION:
                 case EXPERIENCE:
-//                    Section orgSection = new OrganisationSection();
-//                    int orgSectionCount = dis.readInt();
-//                    for (int j = 0; j < orgSectionCount; j++) {
-//                        Organisation organisation = new Organisation();
-//                        organisation.setLink(new LinksList.Link(dis.readUTF(), dis.readUTF()));
-//                        int positionCount = dis.readInt();
-//                        for (int p = 0; p < positionCount; p++) {
-//                            Organisation.Position position = new Organisation.Position();
-//                            position.setBegin(YearMonth.parse(dis.readUTF()));
-//                            position.setEnd(YearMonth.parse(dis.readUTF()));
-//                            position.setHeader(dis.readUTF());
-//                            position.setDescription(dis.readUTF());
-//                            organisation.addPosition(position);
-//                        }
-//                        orgSection.addItem(organisation);
-//                    }
-//                    sections.put(sectionType, orgSection);
+                    OrganisationSection orgSection = new OrganisationSection();
+                    int orgSectionCount = dis.readInt();
+                    for (int j = 0; j < orgSectionCount; j++) {
+                        Organisation organisation = new Organisation();
+                        dis.readInt();
+                        organisation.setLink(new LinksList.Link(dis.readUTF(), dis.readUTF()));
+                        int positionCount = dis.readInt();
+                        for (int p = 0; p < positionCount; p++) {
+                            dis.readInt();
+                            Organisation.Position position = new Organisation.Position();
+                            position.setBegin(YearMonth.parse(dis.readUTF()));
+                            position.setEnd(YearMonth.parse(dis.readUTF()));
+                            position.setHeader(dis.readUTF());
+                            position.setDescription(dis.readUTF());
+                            organisation.addPosition(position);
+                        }
+                        orgSection.addItemOrg(organisation);
+                    }
+                    sections.put(sectionType, orgSection);
                     break;
             }
         }
@@ -180,6 +140,7 @@ public class DataStreamSerializer implements StreamSerializer {
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
         int contactsCount = dis.readInt();
         for (int i = 0; i < contactsCount; i++) {
+            dis.readInt();
             contacts.put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
         }
         return contacts;
