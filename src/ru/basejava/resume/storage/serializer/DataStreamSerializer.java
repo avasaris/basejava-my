@@ -18,8 +18,10 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private <T> void writeElementWithException(DataStreamWriterWithException<T> dsw, T element) throws IOException {
+    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, T... elements) throws IOException {
+        for (T element : elements) {
             dsw.accept(element);
+        }
     }
 
     @Override
@@ -32,61 +34,61 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void resumeHeadersSave(DataOutputStream dos, String... strings) throws IOException {
-        writeCollectionWithException(dos::writeUTF, Arrays.asList(strings));
+        writeCollectionWithException(dos::writeUTF, strings);
     }
 
     private void resumeContactsSave(DataOutputStream dos, Map<ContactType, String> contacts) throws IOException {
-        writeElementWithException(dos::writeInt, contacts.size());
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            writeCollectionWithException(dos::writeUTF, Arrays.asList(entry.getKey().name(), entry.getValue()));
-        }
+        dos.writeInt(contacts.size());
+        writeCollectionWithException(
+                x -> writeCollectionWithException(dos::writeUTF, x.getKey().name(), x.getValue()),
+                contacts.entrySet()
+        );
     }
 
     private void resumeSectionsSave(DataOutputStream dos, Map<SectionType, Section> sections) throws IOException {
-        writeElementWithException(dos::writeInt, sections.size());
+        dos.writeInt(sections.size());
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
             dos.writeUTF(entry.getKey().name());
             switch (entry.getKey()) {
                 case PERSONAL:
                 case OBJECTIVE:
-                    writeElementWithException(dos::writeInt, 1);
-                    writeElementWithException(dos::writeUTF, ((TextSection) entry.getValue()).getContent());
+                    dos.writeInt(1);
+                    dos.writeUTF(((TextSection) entry.getValue()).getContent());
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
                     List<String> lists = ((ListSection) entry.getValue()).getItems();
-                    writeElementWithException(dos::writeInt, lists.size());
+                    dos.writeInt(lists.size());
                     writeCollectionWithException(dos::writeUTF, lists);
                     break;
                 case EDUCATION:
                 case EXPERIENCE:
                     List<Organisation> organisations = ((OrganisationSection) entry.getValue()).getOrganisations();
-                    writeElementWithException(dos::writeInt, organisations.size());
-                    for (Organisation organisation : organisations) {
-                        resumeOrganisationSave(dos, organisation);
-                    }
+                    dos.writeInt(organisations.size());
+                    writeCollectionWithException(
+                            x -> resumeOrganisationSave(dos, x),
+                            organisations
+                    );
                     break;
             }
         }
     }
 
     private void resumeOrganisationSave(DataOutputStream dos, Organisation org) throws IOException {
-        writeCollectionWithException(dos::writeUTF, Arrays.asList(org.getLink().getName(), org.getLink().getUrl()));
+        writeCollectionWithException(dos::writeUTF, org.getLink().getName(), org.getLink().getUrl());
 
         List<Organisation.Position> positions = org.getPositions();
-        writeElementWithException(dos::writeInt, positions.size());
+        dos.writeInt(positions.size());
 
-        for (Organisation.Position position : positions) {
-            writeCollectionWithException(dos::writeUTF, Arrays.asList(position.getBegin().toString(),
-                    position.getEnd().toString(),
-                    position.getHeader(),
-                    position.getDescription()));
-        }
+        writeCollectionWithException(
+                x -> writeCollectionWithException(dos::writeUTF,
+                        Arrays.asList(x.getBegin().toString(),
+                                x.getEnd().toString(),
+                                x.getHeader(),
+                                x.getDescription())),
+                positions
+        );
     }
-
-
-
-
 
 
     @Override
