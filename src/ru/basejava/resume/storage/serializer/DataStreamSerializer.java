@@ -19,9 +19,7 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, T... elements) throws IOException {
-        for (T element : elements) {
-            dsw.accept(element);
-        }
+        writeCollectionWithException(dsw, Arrays.asList(elements));
     }
 
     @Override
