@@ -8,20 +8,6 @@ import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
-    interface DataStreamWriterWithException<T> {
-        void accept(T t) throws IOException;
-    }
-
-    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
-        for (T element : elements) {
-            dsw.accept(element);
-        }
-    }
-
-    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, T... elements) throws IOException {
-        writeCollectionWithException(dsw, Arrays.asList(elements));
-    }
-
     @Override
     public void doWrite(OutputStream os, Resume resume) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
@@ -32,52 +18,53 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void resumeHeadersSave(DataOutputStream dos, String... strings) throws IOException {
-        writeCollectionWithException(dos::writeUTF, strings);
+        writeCollectionWithException(dos::writeUTF, Arrays.asList(strings));
     }
 
     private void resumeContactsSave(DataOutputStream dos, Map<ContactType, String> contacts) throws IOException {
         dos.writeInt(contacts.size());
         writeCollectionWithException(
-                x -> writeCollectionWithException(dos::writeUTF, x.getKey().name(), x.getValue()),
+                x -> writeCollectionWithException(dos::writeUTF, Arrays.asList(x.getKey().name(), x.getValue())),
                 contacts.entrySet()
         );
     }
 
     private void resumeSectionsSave(DataOutputStream dos, Map<SectionType, Section> sections) throws IOException {
         dos.writeInt(sections.size());
-        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            dos.writeUTF(entry.getKey().name());
-            switch (entry.getKey()) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    dos.writeInt(1);
-                    dos.writeUTF(((TextSection) entry.getValue()).getContent());
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    List<String> lists = ((ListSection) entry.getValue()).getItems();
-                    dos.writeInt(lists.size());
-                    writeCollectionWithException(dos::writeUTF, lists);
-                    break;
-                case EDUCATION:
-                case EXPERIENCE:
-                    List<Organisation> organisations = ((OrganisationSection) entry.getValue()).getOrganisations();
-                    dos.writeInt(organisations.size());
-                    writeCollectionWithException(
-                            x -> resumeOrganisationSave(dos, x),
-                            organisations
-                    );
-                    break;
-            }
-        }
+        writeCollectionWithException(
+                entry -> {
+                    dos.writeUTF(entry.getKey().name());
+                    switch (entry.getKey()) {
+                        case PERSONAL:
+                        case OBJECTIVE:
+                            dos.writeInt(1);
+                            dos.writeUTF(((TextSection) entry.getValue()).getContent());
+                            break;
+                        case ACHIEVEMENT:
+                        case QUALIFICATIONS:
+                            List<String> lists = ((ListSection) entry.getValue()).getItems();
+                            dos.writeInt(lists.size());
+                            writeCollectionWithException(dos::writeUTF, lists);
+                            break;
+                        case EDUCATION:
+                        case EXPERIENCE:
+                            List<Organisation> organisations = ((OrganisationSection) entry.getValue()).getOrganisations();
+                            dos.writeInt(organisations.size());
+                            writeCollectionWithException(
+                                    x -> resumeOrganisationSave(dos, x),
+                                    organisations
+                            );
+                            break;
+                    }
+                },
+                sections.entrySet()
+        );
     }
 
     private void resumeOrganisationSave(DataOutputStream dos, Organisation org) throws IOException {
-        writeCollectionWithException(dos::writeUTF, org.getLink().getName(), org.getLink().getUrl());
-
+        writeCollectionWithException(dos::writeUTF, Arrays.asList(org.getLink().getName(), org.getLink().getUrl()));
         List<Organisation.Position> positions = org.getPositions();
         dos.writeInt(positions.size());
-
         writeCollectionWithException(
                 x -> writeCollectionWithException(dos::writeUTF,
                         Arrays.asList(x.getBegin().toString(),
@@ -157,4 +144,13 @@ public class DataStreamSerializer implements StreamSerializer {
         return section;
     }
 
+    interface DataStreamWriterWithException<T> {
+        void accept(T t) throws IOException;
+    }
+
+    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
+        for (T element : elements) {
+            dsw.accept(element);
+        }
+    }
 }
