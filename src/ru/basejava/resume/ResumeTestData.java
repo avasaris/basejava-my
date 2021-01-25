@@ -3,7 +3,8 @@ package ru.basejava.resume;
 import ru.basejava.resume.model.*;
 
 import java.time.YearMonth;
-import java.util.*;
+import java.util.Random;
+import java.util.UUID;
 
 public class ResumeTestData {
     private static final String[] phones = {"+7(921) 855-0482", "+7(223) 445-2020", "+7(223) 000-0010", "+7(552) 938-8726"};
@@ -49,94 +50,120 @@ public class ResumeTestData {
             "Родной русский, английский \"upper intermediate\""
     };
 
-    private static final String[] experiences = {
-            "Java Online Projects", "http://javaops.ru/", "2013-10", "2020-12", "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок.",
-            "Wrike", "https://www.wrike.com/", "2014-10", "2016-01", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
-            "RIT Center", "", "2012-04", "2014-10", "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интеграционных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python",
-            "Luxoft (Deutsche Bank)", "http://www.luxoft.ru/", "2010-12", "2012-04", "Ведущий программист", "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.",
-            "Alcatel", "http://www.alcatel.ru/", "1997-09", "2005-01", "Инженер по аппаратному и программному тестированию", "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."
-    };
-
-    private static final String[] educations = {
-            "Coursera", "https://www.coursera.org/course/progfun", "2013-10", "2020-12", "\"Functional Programming Principles in Scala\" by Martin Odersky",
-            "Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", "2011-03", "2011-04", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
-            "Siemens AG", "http://www.siemens.ru/", "2005-01", "2005-04", "3 месяца обучения мобильным IN сетям (Берлин)",
-            "Alcatel", "http://www.alcatel.ru/", "1997-09", "1998-03", "6 месяцев обучения цифровым телефонным сетям (Москва)"
-    };
-
     private static final Random random = new Random();
 
-    public static Resume generateRandomResume(String uuid, String fullName) {
-        int experiencesCount = 3;
-        int educationsCount = 4;
-
-        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-
-        contacts.put(ContactType.PHONE, getRandom(phones));
-        contacts.put(ContactType.SKYPE, getRandom(skypes));
-        contacts.put(ContactType.EMAIL, getRandom(emails));
-        contacts.put(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + getRandom(nicNames));
-        contacts.put(ContactType.GITHUB, "https://github.com/" + getRandom(nicNames));
-        contacts.put(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/" + getRandom(nicNames));
-        contacts.put(ContactType.HOMEPAGE, getRandom(homePages));
-
-        Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-
-        sections.put(SectionType.PERSONAL, new TextSection(getRandom(positions)));
-        sections.put(SectionType.OBJECTIVE, new TextSection(getRandom(objectives)));
-
-        sections.put(SectionType.ACHIEVEMENT, new ListSection(getRandom(achievements), getRandom(achievements)));
-        sections.put(SectionType.QUALIFICATIONS, new ListSection(getRandom(qualifications), getRandom(qualifications), getRandom(qualifications)));
-
-        OrganisationSection experienceSection = new OrganisationSection();
-        List<Integer> usedExperiences = new ArrayList<>();
-        for (int i = 0; i < experiencesCount; i++) {
-            int randomExperience;
-            do {
-                randomExperience = random.nextInt(experiences.length / 6) * 6;
-            } while (usedExperiences.contains(randomExperience));
-            usedExperiences.add(randomExperience);
-            Organisation.Position position = new Organisation.Position(
-                    YearMonth.parse(experiences[randomExperience + 2]),
-                    YearMonth.parse(experiences[randomExperience + 3]),
-                    experiences[randomExperience + 4],
-                    experiences[randomExperience + 5]);
-            LinksList.Link link = new LinksList.Link(experiences[randomExperience], experiences[randomExperience + 1]);
-            if (i == experiencesCount - 2) {
-                Organisation.Position position2 = new Organisation.Position(
-                        YearMonth.parse(experiences[randomExperience + 2]),
-                        YearMonth.parse(experiences[randomExperience + 3]),
-                        experiences[randomExperience + 4],
-                        experiences[randomExperience + 5]);
-                Organisation organisation = new Organisation(link, position, position2);
-                experienceSection.addItemOrg(organisation);
-            } else {
-                Organisation organisation = new Organisation(link, position);
-                experienceSection.addItemOrg(organisation);
+    public static void fillResume(Resume resume, String... configs) {
+        randomContacts(resume);
+        for (String config : configs) {
+            switch (config) {
+                case "personal":
+                    resume.addSection(SectionType.PERSONAL, new TextSection(getRandom(positions)));
+                    break;
+                case "objective":
+                    resume.addSection(SectionType.OBJECTIVE, new TextSection(getRandom(objectives)));
+                    break;
+                case "section1":
+                    sections1(resume);
+                    break;
+                case "section2":
+                    sections2(resume);
+                    break;
             }
         }
-        sections.put(SectionType.EXPERIENCE, experienceSection);
+    }
+
+    private static void randomContacts(Resume resume) {
+        resume.addContact(ContactType.PHONE, getRandom(phones));
+        resume.addContact(ContactType.SKYPE, getRandom(skypes));
+        resume.addContact(ContactType.EMAIL, getRandom(emails));
+        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + getRandom(nicNames));
+        resume.addContact(ContactType.GITHUB, "https://github.com/" + getRandom(nicNames));
+        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/" + getRandom(nicNames));
+        resume.addContact(ContactType.HOMEPAGE, getRandom(homePages));
+    }
+
+    private static void sections1(Resume resume) {
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievements[0], achievements[1]));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications[0], qualifications[1], qualifications[2]));
+
+        OrganisationSection experienceSection = new OrganisationSection();
+        experienceSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Java Online Projects", "http://javaops.ru/"),
+                        new Organisation.Position(
+                                YearMonth.parse("2013-10"),
+                                YearMonth.parse("2020-12"),
+                                "Автор проекта.",
+                                "Создание, организация и проведение Java онлайн проектов и стажировок."),
+                        new Organisation.Position(
+                                YearMonth.parse("2011-04"),
+                                YearMonth.parse("2012-10"),
+                                "Java архитектор",
+                                "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интеграционных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python")
+                ));
+        experienceSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Wrike", "https://www.wrike.com/"),
+                        new Organisation.Position(
+                                YearMonth.parse("2014-10"),
+                                YearMonth.parse("2016-01"),
+                                "Старший разработчик (backend)",
+                                "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")));
+        resume.addSection(SectionType.EXPERIENCE, experienceSection);
 
         OrganisationSection educationSection = new OrganisationSection();
-        List<Integer> usedEducations = new ArrayList<>();
-        for (int i = 0; i < educationsCount; i++) {
-            int randomEducation;
-            do {
-                randomEducation = random.nextInt(educations.length / 5) * 5;
-            } while (usedEducations.contains(randomEducation));
-            usedEducations.add(randomEducation);
-            Organisation.Position position = new Organisation.Position(
-                    YearMonth.parse(educations[randomEducation + 2]),
-                    YearMonth.parse(educations[randomEducation + 3]),
-                    educations[randomEducation + 4],
-                    "");
-            LinksList.Link link = new LinksList.Link(educations[randomEducation], educations[randomEducation + 1]);
-            Organisation organisation = new Organisation(link, position);
-            educationSection.addItemOrg(organisation);
-        }
-        sections.put(SectionType.EDUCATION, educationSection);
+        educationSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Coursera", "https://www.coursera.org/course/progfun"),
+                        new Organisation.Position(
+                                YearMonth.parse("2013-10"),
+                                YearMonth.parse("2020-12"),
+                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                                "")));
+        resume.addSection(SectionType.EDUCATION, educationSection);
+    }
 
-        return new Resume(uuid, fullName, contacts, sections);
+    private static void sections2(Resume resume) {
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievements[2], achievements[3], achievements[4]));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications[3], qualifications[4]));
+
+        OrganisationSection experienceSection = new OrganisationSection();
+        experienceSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"),
+                        new Organisation.Position(
+                                YearMonth.parse("2010-12"),
+                                YearMonth.parse("2012-04"),
+                                "Ведущий программист",
+                                "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.")));
+        experienceSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Alcatel", "http://www.alcatel.ru/"),
+                        new Organisation.Position(
+                                YearMonth.parse("1997-09"),
+                                YearMonth.parse("2005-01"),
+                                "Инженер по аппаратному и программному тестированию",
+                                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).")));
+        resume.addSection(SectionType.EXPERIENCE, experienceSection);
+
+        OrganisationSection educationSection = new OrganisationSection();
+        educationSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
+                        new Organisation.Position(
+                                YearMonth.parse("2011-03"),
+                                YearMonth.parse("2011-04"),
+                                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
+                                "")));
+        educationSection.addItemOrg(
+                new Organisation(
+                        new LinksList.Link("Siemens AG", "http://www.siemens.ru/"),
+                        new Organisation.Position(
+                                YearMonth.parse("2005-01"),
+                                YearMonth.parse("2005-04"),
+                                "3 месяца обучения мобильным IN сетям (Берлин)",
+                                "")));
+        resume.addSection(SectionType.EDUCATION, educationSection);
     }
 
     public static void printResume(Resume resume) {
@@ -168,7 +195,8 @@ public class ResumeTestData {
     }
 
     public static void main(String[] args) {
-        Resume resume = generateRandomResume(UUID.randomUUID().toString(), "Resume Test Data");
+        Resume resume = new Resume(UUID.randomUUID().toString(), "Resume Test Data");
+        fillResume(resume, "personal", "section2");
         printResume(resume);
     }
 

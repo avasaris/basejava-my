@@ -75,13 +75,31 @@ public class DataStreamSerializer implements StreamSerializer {
         );
     }
 
+    interface DataStreamWriterWithException<T> {
+        void accept(T t) throws IOException;
+    }
+
+    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
+        for (T element : elements) {
+            dsw.accept(element);
+        }
+    }
+
+
+
+
+
+    // TODO refactor code below
+
+
+
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-            resume.setContacts(resumeContactsRestore(dis));
-            resume.setSections(resumeSectionsRestore(dis));
+//            resume.setContacts(resumeContactsRestore(dis));
+//            resume.setSections(resumeSectionsRestore(dis));
             return resume;
         }
     }
@@ -144,13 +162,5 @@ public class DataStreamSerializer implements StreamSerializer {
         return section;
     }
 
-    interface DataStreamWriterWithException<T> {
-        void accept(T t) throws IOException;
-    }
 
-    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
-        for (T element : elements) {
-            dsw.accept(element);
-        }
-    }
 }

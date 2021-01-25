@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.basejava.resume.ResumeTestData;
 import ru.basejava.resume.exception.ExistStorageException;
 import ru.basejava.resume.exception.NotExistStorageException;
 import ru.basejava.resume.model.Resume;
@@ -13,8 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.basejava.resume.ResumeTestData.generateRandomResume;
-
 public abstract class AbstractStorageTest {
     protected static final String STORAGE_DIR = "storage";
     private static final String UUID1 = UUID.randomUUID().toString();
@@ -23,8 +22,14 @@ public abstract class AbstractStorageTest {
     private static final String UUID_NOT_EXIST = UUID.randomUUID().toString();
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
     final Resume resume1 = new Resume(UUID1, "Alex");
-    final Resume resume2 = generateRandomResume(UUID2, "Zed");
-    final Resume resume3 = generateRandomResume(UUID3, "Dan");
+    final Resume resume2 = new Resume(UUID2, "Zed");
+    {
+        ResumeTestData.fillResume(resume2, "personal", "objective");
+    }
+    final Resume resume3 = new Resume(UUID3, "Dan");
+    {
+        ResumeTestData.fillResume(resume2, "personal", "objective", "section1");
+    }
     final Storage storage;
 
     public AbstractStorageTest(Storage storage) {
@@ -58,7 +63,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resumeForUpdate = generateRandomResume(UUID1, "");
+        Resume resumeForUpdate = new Resume(UUID1, "");
+        ResumeTestData.fillResume(resumeForUpdate, "personal", "objective", "section2");
         storage.update(resumeForUpdate);
         Assert.assertEquals(resumeForUpdate, storage.get(UUID1));
     }
@@ -70,7 +76,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        Resume resumeForSave = generateRandomResume(UUID_NOT_EXIST, "Karl");
+        Resume resumeForSave = new Resume(UUID_NOT_EXIST, "Karl");
         storage.save(resumeForSave);
         Assert.assertEquals(4, storage.size());
         Assert.assertEquals(resumeForSave, storage.get(UUID_NOT_EXIST));
