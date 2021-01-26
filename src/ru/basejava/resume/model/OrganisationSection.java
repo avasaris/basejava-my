@@ -3,7 +3,6 @@ package ru.basejava.resume.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -15,14 +14,10 @@ public class OrganisationSection extends Section {
     public OrganisationSection() {
     }
 
-    public OrganisationSection(Organisation... organisations) {
-        Collections.addAll(this.organisations, organisations);
-    }
-
     @Override
     public void addItem(String item) {
     }
-
+//TODO  addItem
     public void addItemOrg(Organisation organisation) {
         organisations.add(organisation);
     }
