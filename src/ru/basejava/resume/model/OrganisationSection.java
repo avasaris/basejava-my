@@ -14,11 +14,7 @@ public class OrganisationSection extends Section {
     public OrganisationSection() {
     }
 
-    @Override
-    public void addItem(String item) {
-    }
-//TODO  addItem
-    public void addItemOrg(Organisation organisation) {
+    public void add(Organisation organisation) {
         organisations.add(organisation);
     }
 

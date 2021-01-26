@@ -9,7 +9,7 @@ class Sout implements SoutInterface {
 
     @Override
     public void doWork() {
-            System.out.println("Do work in interface default method ...");
+        System.out.println("Do work in interface default method ...");
     }
 
 }

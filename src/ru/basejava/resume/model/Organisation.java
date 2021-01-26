@@ -149,25 +149,15 @@ public class Organisation implements Serializable {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
-            Position that = (Position) o;
+            Position position = (Position) o;
 
-            if (!begin.equals(that.begin)) {
-                return false;
-            }
-            if (!end.equals(that.end)) {
-                return false;
-            }
-            if (!header.equals(that.header)) {
-                return false;
-            }
-            return description.equals(that.description);
+            if (!begin.equals(position.begin)) return false;
+            if (!end.equals(position.end)) return false;
+            if (!header.equals(position.header)) return false;
+            return description != null ? description.equals(position.description) : position.description == null;
         }
 
         @Override
@@ -175,7 +165,7 @@ public class Organisation implements Serializable {
             int result = begin.hashCode();
             result = 31 * result + end.hashCode();
             result = 31 * result + header.hashCode();
-            result = 31 * result + description.hashCode();
+            result = 31 * result + (description != null ? description.hashCode() : 0);
             return result;
         }
     }

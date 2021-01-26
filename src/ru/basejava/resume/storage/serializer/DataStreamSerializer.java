@@ -4,7 +4,10 @@ import ru.basejava.resume.model.*;
 
 import java.io.*;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -75,92 +78,69 @@ public class DataStreamSerializer implements StreamSerializer {
         );
     }
 
-    interface DataStreamWriterWithException<T> {
-        void accept(T t) throws IOException;
-    }
-
-    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
-        for (T element : elements) {
-            dsw.accept(element);
-        }
-    }
-
-
-
-
-
-    // TODO refactor code below
-
-
-
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
-//            resume.setContacts(resumeContactsRestore(dis));
-//            resume.setSections(resumeSectionsRestore(dis));
+            readWithException(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+
+            readWithException(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection ts = new TextSection();
+                        readWithException(dis, () -> ts.add(dis.readUTF()));
+                        resume.addSection(sectionType, ts);
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection ls = new ListSection();
+                        readWithException(dis, () -> ls.add(dis.readUTF()));
+                        resume.addSection(sectionType, ls);
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        OrganisationSection orgSection = new OrganisationSection();
+                        readWithException(dis, () -> {
+                            Organisation organisation = new Organisation();
+                            organisation.setLink(new LinksList.Link(dis.readUTF(), dis.readUTF()));
+                            readWithException(dis, () -> {
+                                Organisation.Position position = new Organisation.Position();
+                                position.setBegin(YearMonth.parse(dis.readUTF()));
+                                position.setEnd(YearMonth.parse(dis.readUTF()));
+                                position.setHeader(dis.readUTF());
+                                position.setDescription(dis.readUTF());
+                                organisation.addPosition(position);
+                            });
+                            orgSection.add(organisation);
+                        });
+                        resume.addSection(sectionType, orgSection);
+                        break;
+                }
+            });
             return resume;
         }
     }
 
-    private Map<ContactType, String> resumeContactsRestore(DataInputStream dis) throws IOException {
-        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private <T> void writeCollectionWithException(DataStreamWriterWithException<T> dsw, Collection<T> elements) throws IOException {
+        for (T element : elements) {
+            dsw.write(element);
+        }
+    }
+
+    private void readWithException(DataInputStream dis, RunWithException lambda) throws IOException {
         int contactsCount = dis.readInt();
         for (int i = 0; i < contactsCount; i++) {
-            contacts.put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
+            lambda.run();
         }
-        return contacts;
     }
 
-    private Map<SectionType, Section> resumeSectionsRestore(DataInputStream dis) throws IOException {
-        Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-        int sectionsCount = dis.readInt();
-
-        for (int i = 0; i < sectionsCount; i++) {
-
-            SectionType sectionType = SectionType.valueOf(dis.readUTF());
-            switch (sectionType) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    sections.put(sectionType, resumeStringsSectionRestore(dis, new TextSection()));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    sections.put(sectionType, resumeStringsSectionRestore(dis, new ListSection()));
-                    break;
-                case EDUCATION:
-                case EXPERIENCE:
-                    OrganisationSection orgSection = new OrganisationSection();
-                    int orgSectionCount = dis.readInt();
-                    for (int j = 0; j < orgSectionCount; j++) {
-                        Organisation organisation = new Organisation();
-                        organisation.setLink(new LinksList.Link(dis.readUTF(), dis.readUTF()));
-                        int positionCount = dis.readInt();
-                        for (int p = 0; p < positionCount; p++) {
-                            Organisation.Position position = new Organisation.Position();
-                            position.setBegin(YearMonth.parse(dis.readUTF()));
-                            position.setEnd(YearMonth.parse(dis.readUTF()));
-                            position.setHeader(dis.readUTF());
-                            position.setDescription(dis.readUTF());
-                            organisation.addPosition(position);
-                        }
-                        orgSection.addItemOrg(organisation);
-                    }
-                    sections.put(sectionType, orgSection);
-                    break;
-            }
-        }
-        return sections;
+    interface DataStreamWriterWithException<T> {
+        void write(T t) throws IOException;
     }
 
-    private Section resumeStringsSectionRestore(DataInputStream dis, Section section) throws IOException {
-        int count = dis.readInt();
-        for (int j = 0; j < count; j++) {
-            section.addItem(dis.readUTF());
-        }
-        return section;
+    interface RunWithException {
+        void run() throws IOException;
     }
-
-
 }

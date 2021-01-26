@@ -23,14 +23,16 @@ public abstract class AbstractStorageTest {
     private static final Comparator<Resume> RESUME_COMPARATOR = AbstractStorage.RESUME_COMPARATOR;
     final Resume resume1 = new Resume(UUID1, "Alex");
     final Resume resume2 = new Resume(UUID2, "Zed");
+    final Resume resume3 = new Resume(UUID3, "Dan");
+    final Storage storage;
+
     {
         ResumeTestData.fillResume(resume2, "personal", "objective");
     }
-    final Resume resume3 = new Resume(UUID3, "Dan");
+
     {
         ResumeTestData.fillResume(resume2, "personal", "objective", "section1");
     }
-    final Storage storage;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;

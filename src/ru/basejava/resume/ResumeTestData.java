@@ -87,21 +87,21 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications[0], qualifications[1], qualifications[2]));
 
         OrganisationSection experienceSection = new OrganisationSection();
-        experienceSection.addItemOrg(
+        experienceSection.add(
                 new Organisation(
-                        new LinksList.Link("Java Online Projects", "http://javaops.ru/"),
+                        new LinksList.Link("Java Online Projects", null),
                         new Organisation.Position(
                                 YearMonth.parse("2013-10"),
                                 YearMonth.parse("2020-12"),
                                 "Автор проекта.",
-                                "Создание, организация и проведение Java онлайн проектов и стажировок."),
+                                null),
                         new Organisation.Position(
                                 YearMonth.parse("2011-04"),
                                 YearMonth.parse("2012-10"),
                                 "Java архитектор",
                                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интеграционных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python")
                 ));
-        experienceSection.addItemOrg(
+        experienceSection.add(
                 new Organisation(
                         new LinksList.Link("Wrike", "https://www.wrike.com/"),
                         new Organisation.Position(
@@ -112,7 +112,7 @@ public class ResumeTestData {
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
 
         OrganisationSection educationSection = new OrganisationSection();
-        educationSection.addItemOrg(
+        educationSection.add(
                 new Organisation(
                         new LinksList.Link("Coursera", "https://www.coursera.org/course/progfun"),
                         new Organisation.Position(
@@ -128,7 +128,7 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications[3], qualifications[4]));
 
         OrganisationSection experienceSection = new OrganisationSection();
-        experienceSection.addItemOrg(
+        experienceSection.add(
                 new Organisation(
                         new LinksList.Link("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"),
                         new Organisation.Position(
@@ -136,7 +136,7 @@ public class ResumeTestData {
                                 YearMonth.parse("2012-04"),
                                 "Ведущий программист",
                                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.")));
-        experienceSection.addItemOrg(
+        experienceSection.add(
                 new Organisation(
                         new LinksList.Link("Alcatel", "http://www.alcatel.ru/"),
                         new Organisation.Position(
@@ -147,7 +147,7 @@ public class ResumeTestData {
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
 
         OrganisationSection educationSection = new OrganisationSection();
-        educationSection.addItemOrg(
+        educationSection.add(
                 new Organisation(
                         new LinksList.Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
                         new Organisation.Position(
@@ -155,7 +155,7 @@ public class ResumeTestData {
                                 YearMonth.parse("2011-04"),
                                 "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
                                 "")));
-        educationSection.addItemOrg(
+        educationSection.add(
                 new Organisation(
                         new LinksList.Link("Siemens AG", "http://www.siemens.ru/"),
                         new Organisation.Position(

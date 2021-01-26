@@ -15,13 +15,12 @@ public class TextSection extends Section {
         this.content = content;
     }
 
-    @Override
-    public void addItem(String item) {
-        content = item;
-    }
-
     public String getContent() {
         return content;
+    }
+
+    public void add(String item) {
+        content = item;
     }
 
     @Override

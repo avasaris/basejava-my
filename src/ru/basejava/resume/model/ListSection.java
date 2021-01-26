@@ -16,11 +16,6 @@ public class ListSection extends Section {
         this.items.addAll(Arrays.asList(items));
     }
 
-    @Override
-    public void addItem(String item) {
-        items.add(item);
-    }
-
     public List<String> getItems() {
         return items;
     }
@@ -47,5 +42,9 @@ public class ListSection extends Section {
     @Override
     public int hashCode() {
         return items.hashCode();
+    }
+
+    public void add(String item) {
+        items.add(item);
     }
 }
