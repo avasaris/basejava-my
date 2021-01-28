@@ -157,7 +157,7 @@ public class Organisation implements Serializable {
             if (!begin.equals(position.begin)) return false;
             if (!end.equals(position.end)) return false;
             if (!header.equals(position.header)) return false;
-            return description != null ? description.equals(position.description) : position.description == null;
+            return Objects.equals(description, position.description);
         }
 
         @Override

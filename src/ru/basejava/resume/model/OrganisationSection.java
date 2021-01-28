@@ -22,10 +22,6 @@ public class OrganisationSection extends Section {
         return organisations;
     }
 
-    public void clear() {
-        organisations.clear();
-    }
-
     @Override
     public String toString() {
         return "OrganisationSection{" +
