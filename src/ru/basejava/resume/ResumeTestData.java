@@ -118,8 +118,7 @@ public class ResumeTestData {
                         new Organisation.Position(
                                 YearMonth.parse("2013-10"),
                                 YearMonth.parse("2020-12"),
-                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
-                                "")));
+                                "\"Functional Programming Principles in Scala\" by Martin Odersky")));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }
 
@@ -153,16 +152,14 @@ public class ResumeTestData {
                         new Organisation.Position(
                                 YearMonth.parse("2011-03"),
                                 YearMonth.parse("2011-04"),
-                                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
-                                "")));
+                                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")));
         educationSection.add(
                 new Organisation(
                         new LinksList.Link("Siemens AG", "http://www.siemens.ru/"),
                         new Organisation.Position(
                                 YearMonth.parse("2005-01"),
                                 YearMonth.parse("2005-04"),
-                                "3 месяца обучения мобильным IN сетям (Берлин)",
-                                "")));
+                                "3 месяца обучения мобильным IN сетям (Берлин)")));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }
 

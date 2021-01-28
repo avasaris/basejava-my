@@ -105,6 +105,10 @@ public class Organisation implements Serializable {
             this.description = description;
         }
 
+        public Position(YearMonth begin, YearMonth end, String header) {
+            this(begin, end, header, null);
+        }
+
         public YearMonth getBegin() {
             return begin;
         }
@@ -149,14 +153,24 @@ public class Organisation implements Serializable {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             Position position = (Position) o;
 
-            if (!begin.equals(position.begin)) return false;
-            if (!end.equals(position.end)) return false;
-            if (!header.equals(position.header)) return false;
+            if (!begin.equals(position.begin)) {
+                return false;
+            }
+            if (!end.equals(position.end)) {
+                return false;
+            }
+            if (!header.equals(position.header)) {
+                return false;
+            }
             return Objects.equals(description, position.description);
         }
 
