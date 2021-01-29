@@ -65,15 +65,20 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void resumeOrganisationSave(DataOutputStream dos, Organisation org) throws IOException {
-        writeCollectionWithException(dos::writeUTF, Arrays.asList(org.getLink().getName(), (org.getLink().getUrl() == null) ? "" : org.getLink().getUrl()));
+        LinksList.Link link = org.getLink();
+        String url = link.getUrl();
+        writeCollectionWithException(dos::writeUTF, Arrays.asList(link.getName(), (url == null) ? "" : url));
         List<Organisation.Position> positions = org.getPositions();
         dos.writeInt(positions.size());
         writeCollectionWithException(
-                x -> writeCollectionWithException(dos::writeUTF,
-                        Arrays.asList(x.getBegin().toString(),
-                                x.getEnd().toString(),
-                                x.getHeader(),
-                                (x.getDescription() == null) ? "" : x.getDescription())),
+                x -> {
+                    String description = x.getDescription();
+                    writeCollectionWithException(dos::writeUTF,
+                            Arrays.asList(x.getBegin().toString(),
+                                    x.getEnd().toString(),
+                                    x.getHeader(),
+                                    (description == null) ? "" : description));
+                },
                 positions
         );
     }
@@ -128,24 +133,24 @@ public class DataStreamSerializer implements StreamSerializer {
         return organisation;
     }
 
-    private <T> void writeCollectionWithException(GenericFuncInterfaceWithExceptions<T> dsw, Collection<T> elements) throws IOException {
+    private <T> void writeCollectionWithException(ConsumerWithExceptions<T> dsw, Collection<T> elements) throws IOException {
         for (T element : elements) {
-            dsw.run(element);
+            dsw.accept(element);
         }
     }
 
-    private void readWithException(DataInputStream dis, RunWithException lambda) throws IOException {
+    private void readWithException(DataInputStream dis, SimpleConsumerWithException lambda) throws IOException {
         int count = dis.readInt();
         for (int i = 0; i < count; i++) {
-            lambda.run();
+            lambda.accept();
         }
     }
 
-    interface GenericFuncInterfaceWithExceptions<T> {
-        void run(T t) throws IOException;
+    interface ConsumerWithExceptions<T> {
+        void accept(T t) throws IOException;
     }
 
-    interface RunWithException {
-        void run() throws IOException;
+    interface SimpleConsumerWithException {
+        void accept() throws IOException;
     }
 }
